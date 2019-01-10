@@ -171,6 +171,11 @@ $(document).ready(function(){
         }
     });
 
+    //Don't let movie appear when deleting file
+    $('.item-del').on('click', function(e){
+        e.stopPropagation();
+    });
+
     //Toggle alphabetical categories
     $('.letter-head-tog').on('click',function(){
         if ($('.letter-head').hasClass('letter-head-active')){
@@ -183,7 +188,7 @@ $(document).ready(function(){
     $('.item-ren').on('click', function(e){
         e.stopPropagation();
         $('.ren_container').addClass('ren-active');
-        $(this).siblings('.file-item').attr('id','rename');
+        $(this).parent().attr('id','rename');
     });
     $('#renc').on('click', function(){
         $('.ren_container').removeClass('ren-active');
@@ -461,10 +466,10 @@ $(function() {
 
     $(".breadcrumb,.box-container").droppable({
         over: function(event, ui) {
-            $('.ui-draggable-dragging .dir-box').addClass('hover-active');
+            $('.ui-draggable-dragging .dir-box').parent().addClass('hover-active');
         },
         out: function(event, ui) {
-            $('.ui-draggable-dragging .dir-box').removeClass('hover-active');
+            $('.ui-draggable-dragging .dir-box').parent().removeClass('hover-active');
         },
         tolerance: 'pointer',
 

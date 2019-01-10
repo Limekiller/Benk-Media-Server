@@ -5,9 +5,10 @@ function get_results($site, $query){
     libxml_use_internal_errors(true);
 
     if ($site == 'tc1'){
-        $html = file_get_contents('https://thepiratebay.org/search/'.rawurlencode($query).'/0/99/0');
+        $html = file_get_contents('https://pirateproxy.gdn/search/'.rawurlencode($query).'/0/99/0');
     } else if ($site == 'tc2'){
-        $html = file_get_contents('https://btdb.to/q/'.rawurlencode($query).'/?sort=popular');
+        $query = str_replace(" ", "-", $query);
+        $html = file_get_contents('https://www.magnetdl.com/'.substr($query,0,1).'/'.rawurlencode($query).'/se/desc/');
     }
     if ($site == 'tc1' || $site == 'tc2'){
         $method = 'dl';
@@ -21,7 +22,7 @@ function get_results($site, $query){
         if ($site == 'tc1'){
             $links = $xpath->query('//a[@class="detLink"]');
         }else if ($site == 'tc2'){
-            $links = $xpath->query('//h2[@class="item-title"]/a/@title');
+            $links = $xpath->query('//td[@class="n"]/a/@title');
         }
 
         if($links->length > 0){
@@ -46,9 +47,10 @@ function grab_dl($tor_site, $title, $site){
     $home = '/home/www-data';
 
     if ($tor_site == 'tc1'){
-        $html = file_get_contents('https://thepiratebay.org/search/'.rawurlencode($title).'/0/99/0');
+        $html = file_get_contents('https://pirateproxy.gdn/search/'.rawurlencode($title).'/0/99/0');
     } else if ($tor_site == 'tc2'){
-        $html = file_get_contents('https://btdb.to/q/'.rawurlencode($title).'/?sort=popular');
+        $title = strtolower(str_replace([' ','.',':','(',')','[',']',';'], '-', $title));
+        $html = file_get_contents('https://www.magnetdl.com/'.substr($title,0,1).'/'.rawurlencode($title).'/se/desc/');
     }
 
     $doc = new DOMDocument();
@@ -59,7 +61,7 @@ function grab_dl($tor_site, $title, $site){
         if ($tor_site == 'tc1'){
             $links = $xpath->query('//a[@title="Download this torrent using magnet"]/@href');
         } else if ($tor_site == 'tc2'){
-            $links = $xpath->query('//a[@class="magnet"]/@href');
+            $links = $xpath->query('//td[@class="m"]/a/@href');
         }
 
         if($links->length > 0){
@@ -80,14 +82,14 @@ function grab_dl($tor_site, $title, $site){
 function stream($search_term){
     libxml_use_internal_errors(true);
     $search_term = str_replace(" ", "+", $search_term);
-    $html = file_get_contents('https://search.stream.cr/y/?query='.$search_term); 
+    $html = file_get_contents('https://scrasdfcr/search.php?query='.$search_term); 
     $doc = new DOMDocument();
 
     if(!empty($html)){
         $doc->loadHTML($html);
         $xpath = new DOMXPath($doc);
-        $links = $xpath->query('//a[@class="rl"]/@href');
-        $titles = $xpath->query('//a[@class="rl"]');
+        $links = $xpath->query('//a[@class="ml-mask"]/@href');
+        $titles = $xpath->query('//a[@class="ml-mask"]/@oldtitle');
         $results = '';
 
     } else {
@@ -133,7 +135,6 @@ function stream($search_term){
 // Grab video page from search
 function grab_stream($link){
     libxml_use_internal_errors(true);
-    error_log($link);
     $html = file_get_contents($link); 
     $doc = new DOMDocument();
 
@@ -146,9 +147,16 @@ function grab_stream($link){
             $links = $xpath->query('//div[@id="media-player"]/script');
             $base64 = substr($links[0]->textContent, 0, 29);
             $base64 = substr($base64, 0, strlen($base64)-2);
-            error_log($base64);
         } else {
-            $links = $xpath->query('//span[@id="inchannel"]/iframe/@src');
+            
+            $eid = $xpath->query('//a[@id="sv-ca1"]/@data-eid');
+            $eid = $eid[0]->textContent;
+
+            $full_url = 'https://scr.cr/gd-source.php?eid='.$eid;
+            $json = file_get_contents($full_url);
+
+
+            //$links = $xpath->query('//video[@class="jw-video"]/@src');
         }
         echo $links[0]->textContent;
     }

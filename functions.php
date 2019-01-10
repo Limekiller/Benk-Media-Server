@@ -24,7 +24,7 @@ function list_files() {
     $files = array_diff(scandir('.'), array('.','..','index.php'));
     if (empty($files)){
         echo '<div class="file-container">';
-        echo "<h3 style='text-align:center;'>There's nothing here! Why not add some files?</h3>";
+        echo "<h3 style='margin:0 auto;margin-top:15vh;'>There's nothing here! Why not add some files?</h3>";
         echo '</div>';
         return;
     }

@@ -88,11 +88,7 @@ a {
     z-index:99;
 }
 .hover-active {
-    height:100px !important;
-    width:100px !important;
-    line-height:150px !important;
-    margin-top:40px !important;
-    font-size:10px;
+    transform: scale(0.5) !important;
 }
 
 
@@ -228,7 +224,7 @@ a {
     margin-left:5vw;
     margin-right:5vw;
     z-index:0;
-    transition:all 0.4s ease;
+    transition:transform 0.4s ease;
     box-shadow:0px 0px 9px rgba(0,0,0,.3);
 }
 .box-container:hover {
@@ -269,6 +265,7 @@ a {
     cursor:pointer;
     min-height:1px;
     transition:all 0.4s ease;
+    margin-bottom:25px;
 }
 .file-item p {
     width:100%;
@@ -299,8 +296,7 @@ a {
 }
 .item-container {
     width:100%;
-    margin-bottom:25px;
-    transition:all 0.4s ease;
+    transition:width 0.4s ease;
 }
 .file-item:hover {
     box-shadow:0px 0px 9px #f90;
@@ -689,9 +685,10 @@ a {
     background-image:url("/.Images/tpb.png");
 }
 #tc2, #sc2{
-    background-image:url("/.Images/btdb.png");
+    background-image:url("/.Images/magnetdl.png");
 }
 #result_container, #sresult_container {
+    margin-top:100px;
     margin-bottom:150px;
 }
 .result {
@@ -700,7 +697,7 @@ a {
     background-color:white;
     box-shadow:0px 0px 9px rgba(0,0,0,0.3);
     margin:0 auto;
-    margin-top:50px;
+    margin-bottom:50px;
     padding:25px;
     text-align:left;
     cursor:pointer;
@@ -841,6 +838,9 @@ button:hover {
         text-align:center;
         margin-left:-40px;
         margin-top:50px;
+    }
+    .view-tog {
+        margin-left:25px;
     }
     .box-del {
         right:5px;

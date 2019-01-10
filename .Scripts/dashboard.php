@@ -15,7 +15,7 @@ function get_dls(){
 
     if ($percent == 'NAN'){
        $percent = "Initializing..."; 
-    } else if ($percent == "0"){
+    } else if ($percent == "99"){
        $percent = "Validating..."; 
     }
 
