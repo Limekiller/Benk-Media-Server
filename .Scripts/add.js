@@ -73,6 +73,7 @@ $(document).ready(function(){
     $('.view-tog').on('click', function() {
         if (view == 0){
            view = 1;
+           $('.span_fileitem').empty();
            $(this).addClass('view-tog-v');
            $('.item-container').addClass('item-container-art');
            $('.item-container').addClass('tooltip');

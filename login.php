@@ -22,10 +22,9 @@ session_start();
 </head>
 <body>
 <div id='logo-container'>
-    <div id='play-container'>
-        <div id='play-bar'></div>
-        <div id='play'></div>
-    </div>
+    <div id='play-bar'></div>
+    <div id='play-container'></div>
+    <div id='play'></div>
     <img id='logo' src='/.Images/benk_logo_text.svg'/>
 </div>
 <div id='login-container'>

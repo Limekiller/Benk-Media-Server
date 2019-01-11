@@ -255,7 +255,6 @@ a {
     margin-bottom:150px;
     display:flex;
     flex-wrap:wrap;
-    justify-content:space-between;
 }
 .file-item {
     display:block;
@@ -297,6 +296,7 @@ a {
 .item-container {
     width:100%;
     transition:width 0.4s ease;
+    margin-right:50px;
 }
 .file-item:hover {
     box-shadow:0px 0px 9px #f90;
@@ -419,7 +419,7 @@ a {
     float:right;
     cursor:pointer;
     margin-top:-30px;
-    margin-right:40px;
+    margin-right:100px;
 }
 .view-tog {
     display:flex;
@@ -943,7 +943,7 @@ button:hover {
         margin-top:-20px;
     }
     .bc_c:hover #dbc {
-        transform:scale(1.75);
+        transform:scale(1.5) rotate(45deg);
     }
     .partial-listing {
         margin-left:0px;

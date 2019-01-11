@@ -40,7 +40,7 @@ function remove_non_av($dir, $destination){
                         // Run file through file validation script
                         $new_dest = '/var/www/media.bryceyoder.com'.$destination.'/'.rawurlencode($object).'.mp4';
                         rename($dir.'/'.$object, $new_dest); 
-                        exec("bash video_validation.sh '$new_dest'");
+                        // exec("bash video_validation.sh '$new_dest'");
                     }
                 } else { remove_non_av($dir.'/'.$object, $destination); }
             }

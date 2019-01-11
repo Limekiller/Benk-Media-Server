@@ -1,51 +1,63 @@
 body {
-overflow-y:hidden;
+overflow:hidden;
 background-color:white;
+margin:0;
+height:100%;
 }
 #logo {
-    height:325px;
-    margin-top:-75px;
     opacity:0;
-    animation: fade-in 0.5s ease 2.25s forwards;
+    height:325px;
+    margin-top:-80px;
+    position:relative;
+    animation: fade-in 0.5s ease 1.5s forwards;
 }
 #logo-container {
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    margin-top:40vh;
-    animation: logo-container 0.5s ease 2.25s forwards;
+    position:relative;
+    margin:0 auto;
+    text-align:center;
+    top:50%;
+    transform:translateY(-50%);
+    animation: logo-container 0.5s ease 1.25s forwards;
 }
 #play-container {
-     background-color:white;
-     height:150px;
-     width:150px;
-     animation: play-container 1.25s ease 1s forwards, play-container-2 0.5s ease 2.25s forwards;
+     background-color:#f90;
+     height:175px;
+     width:175px;
+     margin:0 auto;
+     margin:0 auto;
+     transform:rotate(0deg) scale(50);
+     animation: play-container 0.5s ease 0.75s forwards;
  }
  #play {
-     background-color:#f90;
-     width:100px;
-     height:100px;
-     transition:all 0.4s ease;
+     background-color:white;
+     width:115px;
+     height:115px;
+     position:absolute;
      clip-path:polygon(75% 50%, 0 0, 0 100%);
-     animation: play 1.25s ease 1s forwards;
-     margin-left:40px;
-     position:relative;
-     top:25px;
+     animation: play 0.5s ease 0.5s forwards;
+     margin:0 auto;
+     left:60px;
+     right:0;
+     top:31%;
+     transform:scale(100) rotate(45deg);
  }
  #play-bar {
-     position:absolute;
+     position:relative;
      background-color:white;
      width:25px;
-     height:0px;
-     transform:rotate(-45deg);
-     margin-top:-55px;
-     margin-left:14px;
-     animation: play-bar 0.5s ease 2.15s forwards;
+     height:130px;
+     margin:0 auto;
+     z-index:99;
+     left:-15px;
+     top:-50vh;
+     animation: play-bar 0.25s ease 1s forwards;
  }
 #login-container {
     text-align:center;
-    animation:fade-in 1s ease 3.5s forwards;
+    transform:translateY(-300%);
+    position:relative;
+    top:50%;
+    animation:fade-in 1s ease 1.75s forwards;
     opacity:0;
 }
 input[type=password]{
@@ -70,9 +82,7 @@ input[type=submit]{
     transition:all 0.4s ease;
 }
 input[type=submit]:hover{
-    margin-top:48px;
-    width:110px;
-    height:60px;
+    transform:scale(1.25);
 }
 
 @media all and (max-width:760px){
@@ -82,49 +92,24 @@ input[type=submit]:hover{
 }
 
 @keyframes play-bar {
-     from {height:0px;margin-top:118px;margin-left:88px;}
-     to {height:200px;}
+     from {top:-50vh;}
+     to {top:80px;}
  }
  @keyframes logo-container {
-    from {margin-top:40vh;}
-    to {margin-top:10vh;}
+    from {transform:translateY(-50%);}
+    to {transform:translateY(-75%);}
  }
  @keyframes play-container {
-     0% {width:150px;height:150px;}
-     20% {width:160px;height:160px;background-color:white;margin-left:0px;}
-     60% {width:125px;height:125px;background-color:#ffc369;margin-left:-5px;transform:none;}
-     100%{width:175px;height:175px;background-color:#f90;margin-left:-15px;transform:rotate(45deg);}
- }
- @keyframes play-container-2 {
-     from {margin-top:0vh;}
-     to {margin-top:0vh;}
+     0% {transform:scale(10) rotate(0deg);}
+     100%{transform:scale(1) rotate(45deg);}
  }
  @keyframes fade-in {
     from{opacity:0;}
     to {opacity:1;}
  }
 @keyframes play {
-     0% {width:100px;height:100px;}
-     20% {width:110px;
-         height:110px;
-         top:23px;
-         margin-left:43px;
-         }
-     60% {width:75px;
-         height:75px;
-         background-color:#f90;
-         transform:none;
-         top:23px;
-         margin-left:38px;
-         }
-     100%{
-         width:115px;
-         height:115px;
-         background-color:white;
-         transform:rotate(-45deg);
-         top:10px;
-         margin-left:55px;
-     }
+     0% {transform:scale(75) rotate(45deg);}
+     100%{transform:scale(1);}
  }
 @font-face {
     font-family: Avenir Bold;
