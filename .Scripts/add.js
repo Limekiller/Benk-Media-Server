@@ -78,6 +78,7 @@ $(document).ready(function(){
            $('.item-container').addClass('item-container-art');
            $('.item-container').addClass('tooltip');
            $('.item-ren, .item-del').addClass('item-v');
+           $('.item-dl img').addClass('item-dlv');
            $('.file-item').addClass('file-item-art');
            $('.file-item span').css('padding', '50px');
            $('.file-item').each(function(i, obj){
@@ -93,6 +94,7 @@ $(document).ready(function(){
            $('.file-item span').html('');
            $('.file-item span').css('padding', '0');
            $('.item-ren, .item-del').removeClass('item-v');
+           $('.item-dl img').removeClass('item-dlv');
         }
     });
 
@@ -172,8 +174,11 @@ $(document).ready(function(){
         }
     });
 
-    //Don't let movie appear when deleting file
+    //Don't let movie appear when deleting or downloading file
     $('.item-del').on('click', function(e){
+        e.stopPropagation();
+    });
+    $('.item-dl').on('click', function(e){
         e.stopPropagation();
     });
 

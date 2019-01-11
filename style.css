@@ -302,14 +302,18 @@ a {
     box-shadow:0px 0px 9px #f90;
     transform:scale(1.02);
 }
-.file-item:hover .item-del, .file-item:hover .item-ren{
+.file-item:hover .item-del, .file-item:hover .item-ren, .file-item:hover .item-dl{
     opacity:1;
 }
 .item-container-art {
     width:300px;
     background:0;
 }
-.item-del, .item-ren{
+.item-dl img{
+    width:16px;
+    filter:invert(40%);
+}
+.item-del, .item-ren, .item-dl{
     opacity:0;
     display:inline;
     float:right;
@@ -319,8 +323,11 @@ a {
     margin-top:-7px;
     cursor:pointer;
 }
-.item-del:hover, .item-ren:hover{
+.item-del:hover, .item-ren:hover, .item-dl:hover{
     transform:scale(1.6);
+}
+.item-dlv {
+   filter:invert(100%) drop-shadow(1px 1px 0 black) drop-shadow(-1px -1px 0 black) !important;
 }
 .item-v {
     color:white;
@@ -768,13 +775,14 @@ button:hover {
     color:white;
     box-shadow:0px 0px 9px rgba(0,0,0,0.3);
     animation: n_in 0.6s ease forwards, n_in 0.6s ease 5s reverse forwards;
-    float:right;
     background:linear-gradient(#f90, #ffcf00);
     padding:20px;
     padding-right:100px;
     margin-top:-24px;
     margin-right:-500px;
     z-index:99;
+    right:0;
+    position:fixed;
 }
 
 
@@ -847,7 +855,7 @@ button:hover {
         padding:10px;
         opacity:1;
     }
-    .item-del, .item-ren {
+    .item-del, .item-ren, .item-dl {
         opacity:1;
     }
     .cnd-container, .cnd, .um_container, .um, .dd-container, .dd, .ren_container, .ren {

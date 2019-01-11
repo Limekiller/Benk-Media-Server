@@ -77,6 +77,7 @@ function list_files() {
                         <div id='fileitem$vid_id' $color onclick='play($vid_id, \"".rawurlencode($file)."\", \"name\")' class='file-item' >
                             <a class='item-del' href=\"?itemdel=".rawurlencode($file)."\">X</a>
                             <div class='item-ren'>A</div>
+                            <a class='item-dl' href=\"?itemdl=".rawurlencode($file)."\"><img src='/.Images/dl.png' /></a>
                             <p class='fip $cutoff'>".rawurldecode($file_new)."</p>
                         </div>
                       </div>";

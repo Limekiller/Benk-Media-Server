@@ -27,6 +27,14 @@ session_start();
         unlink('./'.$_GET['itemdel']);
         header('Location: '.$dir.'?del=1');
     }
+    if (isset($_GET['itemdl'])) {
+        $item = $_GET['itemdl'];
+        $item = str_replace(" ","~",$item);
+        header("Content-Disposition: attachment; filename=" . basename($item));
+        header("Content-Length: " . filesize($item));
+        header("Content-Type: application/octet-stream;");
+        readfile($item);
+    }
     if (isset($_GET['boxdel'])) {
         removedir($_GET['boxdel']);
         header('Location: '.$dir);

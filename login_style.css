@@ -100,7 +100,7 @@ input[type=submit]:hover{
     to {transform:translateY(-75%);}
  }
  @keyframes play-container {
-     0% {transform:scale(10) rotate(0deg);}
+     0% {transform:scale(15) rotate(115deg);}
      100%{transform:scale(1) rotate(45deg);}
  }
  @keyframes fade-in {
