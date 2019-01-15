@@ -129,6 +129,7 @@ a {
 }
 #bch {
     margin-left:-25px;
+    transition:transform 0.4s ease;
 }
 #bch .breadcrumb {
     background:linear-gradient(#f90, #ffcf00);
@@ -144,11 +145,10 @@ a {
     margin-top:20px;
 }
 .bc_c:hover #dbc {
-    margin-top:0px;
+    transform:scale(1.25) rotate(45deg);
 }
-#bch:hover .breadcrumb {
-    height:75px;
-    width:75px;
+#bch:hover {
+    transform:scale(1.35);
 }
 .bc_c:hover .breadcrumb {
     height:50px;
