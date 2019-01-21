@@ -130,6 +130,9 @@ a {
 #bch {
     margin-left:-25px;
     transition:transform 0.4s ease;
+    width:30px;
+    margin: 0 auto;
+    margin-top:15px;
 }
 #bch .breadcrumb {
     background:linear-gradient(#f90, #ffcf00);
@@ -399,9 +402,7 @@ a {
     z-index:99;
 }
 .vid-close:hover {
-    font-size:50px;
-    margin-right:40px;
-    margin-top:20px;
+    transform:scale(1.35);
 }
 .video-container-active {
     opacity:1;
@@ -714,7 +715,7 @@ a {
     /*padding-top:40px;
     padding-bottom:40px;*/
 box-shadow:0px 0px 9px #f90;
-transform: scale(1.1);
+transform: scale(1.02);
 }
 .close{
     transition:all 0.4s ease;
