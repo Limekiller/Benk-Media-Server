@@ -28,6 +28,8 @@ function remove_non_av($dir, $destination){
                     } else {
 
                         // This automatically converts non mp4 files to mp4 -- takes a while so disabled
+                        // TODO: add as option to convert files when user prompts to do so?
+                        
                         //$type_check_array = explode('.',$object);
                         //if (end($type_check_array) == 'mkv'){
                         //    $type_check_array = array_slice($type_check_array, 0, -1);
@@ -40,6 +42,7 @@ function remove_non_av($dir, $destination){
                         // Run file through file validation script
                         $new_dest = '/var/www/media.bryceyoder.com'.$destination.'/'.rawurlencode($object).'.mp4';
                         rename($dir.'/'.$object, $new_dest); 
+                        // This script checks the file and determines if it's broken or not. Disabled right now
                         // exec("bash video_validation.sh '$new_dest'");
                     }
                 } else { remove_non_av($dir.'/'.$object, $destination); }

@@ -100,7 +100,7 @@ session_start();
             <ul>
                 <li id='cnd'> Create new directory </li> 
                 <?php if ($dir != "/"){
-                    echo "<li id='dnf'> Download new </li>
+                    echo "<li id='dnf'> Download media</li>
                     <li id='um'> Upload media </li>";
                 }?>
             </ul>

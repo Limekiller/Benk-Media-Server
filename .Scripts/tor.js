@@ -20,13 +20,11 @@ function play(id, title, type){
         });
     }
 
-    // Close vids with ESC (sorta broken for some reason?)
-    // rn it only works on the first video
     $(document).keyup(function(event) {
         if(event.keyCode == 27){
-            if (screen.width >= 760){
-                videojs("_vid"+id).dispose();
-            }
+            //if (screen.width >= 760){
+            //    videojs("_vid"+id).dispose();
+            //}
             $('.video-container').removeClass('video-container-active');
             $('.video-container').html("");
             $(".menu-container").removeClass('nb-active-dl');
@@ -60,6 +58,9 @@ function get_results(method){
         context: document.body
     }).done(function(data) {
         document.getElementById('result_container').innerHTML = data;
+        $('.result').on('click', function() {
+            $(this).addClass('result_loading');
+        });
     });
 }
 
@@ -76,10 +77,10 @@ function grab_dl(title, method){
     }).done(function(data) {
         $('body').removeClass('dnf-body');
         if (data == "success"){
-            $('.dnf_container').removeClass('dnf-active');
+            $('.result').removeClass('result_loading');
             $(document.body).prepend("<div class='notify'>Your download will start soon!</div>");
         } else if (data == "error") {
-            $('.dnf_container').removeClass('dnf-active');
+            $('.result').removeClass('result_loading');
             $(document.body).prepend("<div class='notify'>An error has occurred. Please try again.</div>");
         }
     });
