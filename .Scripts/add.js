@@ -72,29 +72,45 @@ $(document).ready(function(){
     //Toggle viewstyle
     $('.view-tog').on('click', function() {
         if (view == 0){
-           view = 1;
-           $('.span_fileitem').empty();
-           $(this).addClass('view-tog-v');
-           $('.item-container').addClass('item-container-art');
-           $('.item-container').addClass('tooltip');
-           $('.item-ren, .item-del').addClass('item-v');
-           $('.item-dl img').addClass('item-dlv');
-           $('.file-item').addClass('file-item-art');
-           $('.file-item span').css('padding', '50px');
-           $('.file-item').each(function(i, obj){
-                get_metadata($(obj).children('.fip').html(), $(obj).attr('id'), view);
-           });
+           $('.file-container').addClass('file-container-transition');
+            setTimeout(function() {
+               view = 1;
+               $('.span_fileitem').empty();
+               $(this).addClass('view-tog-v');
+               $('.item-container').addClass('item-container-art');
+               $('.item-container').addClass('tooltip');
+               $('.item-ren, .item-del').addClass('item-v');
+               $('.item-dl img').addClass('item-dlv');
+               $('.file-item').addClass('file-item-art');
+               $('.file-item .loading').css('display','inherit');
+               $('.file-item span').css('padding', '50px');
+               $('.file-item').each(function(i, obj){
+                    get_metadata($(obj).children('.fip').html(), $(obj).attr('id'), view);
+               });
+            }, 100);
+           setTimeout(function(){
+               $('.file-container').removeClass('file-container-transition');
+           }, 500);
         } else {
-           view = 0;
-           $(this).removeClass('view-tog-v');
-           $('.file-item').removeClass('file-item-art');
-           $('.item-container').removeClass('tooltip');
-           $('.item-container').removeClass('item-container-art');
-           $('.file-item').css('background-image', '');
-           $('.file-item span').html('');
-           $('.file-item span').css('padding', '0');
-           $('.item-ren, .item-del').removeClass('item-v');
-           $('.item-dl img').removeClass('item-dlv');
+           $('.file-container').addClass('file-container-transition');
+           setTimeout(function() {
+               view = 0;
+               $(this).removeClass('view-tog-v');
+               $('.file-item').removeClass('file-item-art');
+               $('.item-container').removeClass('tooltip');
+               $('.item-container').removeClass('item-container-art');
+               $('.file-item').css('background-image', '');
+               $('.file-item').css('opacity', '1');
+               $('.file-item .loading').css('display','none');
+               $('.file-item span').html('');
+               $('.file-item span').css('padding', '0');
+               $('.fip').removeAttr('style');
+               $('.item-ren, .item-del').removeClass('item-v');
+               $('.item-dl img').removeClass('item-dlv');
+           }, 100);
+           setTimeout(function(){
+               $('.file-container').removeClass('file-container-transition');
+           }, 500);
         }
     });
 
@@ -353,6 +369,7 @@ $(document).ready(function(){
 // Get movie info from IMDb database
 function get_metadata(term, id, view){
 
+    setTimeout(noIMDB(id));
     //Attempt to get info based on title
     $.ajax({
         url: '/functions.php',
@@ -384,17 +401,17 @@ function get_metadata(term, id, view){
                 data_1 = JSON.parse(data);
 
                 // Get plot summary with new data
-                plot_summary(id, view, data_1, newterm);
+                plot_summary(id, data_1, newterm);
             });
 
         // The title worked fine by itself
         } else {
-            plot_summary(id, view, data_1, term);
+            plot_summary(id, data_1, term);
         }
     });
 }
 
-function plot_summary(id, view, data, term){
+function plot_summary(id, data, term){
     //Plot summary isn't part of data, so use returned ID to scrape the page for the plot summary
     var imdbid = data.d[0].id;
     var img = data.d[0].i;
@@ -409,6 +426,9 @@ function plot_summary(id, view, data, term){
     }).done(function(data){
 
         //Inject into page
+        $('.fip').removeAttr('style');
+        $('#'+id).css('opacity', '1');
+        $('#'+id+' .loading').css('display', 'none');
         if (view == 0){
             expand = $('#'+id).addClass('file-item-active');
             $('#'+id).append("<div class='details'><img src='"+img+"' /><div class='desc'><h2>"+year+"</h2><h3>"+star+"</h3></div></div>");
@@ -419,6 +439,19 @@ function plot_summary(id, view, data, term){
             $('#span_'+id).append('<div class="desc"><h1>'+title+'</h1><h2>'+year+'</h2><h3>'+star+'</h3><p>'+data+'</div></div>');
         }
     });
+}
+
+function noIMDB(id) {
+    setTimeout(function() {
+        if ($('#'+id+' .loading').css('display') != 'none') {
+            $('#'+id+' .loading').css('display', 'none');
+            $('#'+id+' .loading').siblings('.fip').css('color', 'black');
+            $('#'+id+' .loading').siblings('.fip').css('font-size', '25px');
+            $('#'+id+' .loading').siblings('.fip').css('white-space', 'normal');
+            $('#'+id+' .loading').siblings('.fip').css('width', '180px');
+            $('#'+id).css('opacity', '0.5');
+        }
+    }, 10000);
 }
 
 function rename(file, name) {

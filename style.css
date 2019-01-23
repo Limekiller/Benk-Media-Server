@@ -132,6 +132,7 @@ a {
     transition:transform 0.4s ease;
     width:50px;
     margin: 0 auto;
+    margin-right:50px;
     margin-top:15px;
     display:initial;
 }
@@ -206,7 +207,13 @@ a {
     color:grey;
     transition:all 0.4s ease;
     line-height:300px;
-    white-space:nowrap;
+    overflow:hidden;
+}
+.dir-box span {
+    display:inline-block;
+    vertical-align:middle;
+    line-height:27px;
+    text-align:center;
 }
 #dbmo {
     background:url("/.Images/film.svg"),linear-gradient(lightgrey 10%, white);
@@ -259,6 +266,10 @@ a {
     margin-bottom:150px;
     display:flex;
     flex-wrap:wrap;
+    transition:opacity 0.2s ease;
+}
+.file-container-transition {
+    opacity:0;
 }
 .file-item {
     display:block;
@@ -412,14 +423,19 @@ a {
 .letter-head {
     font-size:30px;
     font-family: Avenir Bold;
-    margin-bottom:10px;
-    transition:font-size 0.4s ease;
-    width:100%;
+    opacity:0;
+    margin-top:-40px;
+    pointer-events:none;
+    transition:margin 0.4s ease, opacity 0.4s ease;
+    width:0%;
     cursor:pointer;
-    display:none;
 }
 .letter-head-active {
-    display:inherit;
+    margin:0px;
+    width:100%;
+    margin-bottom:10px;
+    pointer-events:auto;
+    animation:fade_in 0.4s 0.4s ease forwards;
 }
 .letter-head:hover {
     font-size:35px;
@@ -711,6 +727,7 @@ a {
     text-align:left;
     cursor:pointer;
     transition:all 0.4s ease;
+    animation:fade_in 0.4s ease forwards;
 }
 .result:hover {
     /*padding-top:40px;
@@ -844,7 +861,7 @@ button:hover {
         margin-top:0px;
     }
     .page_title {
-        padding-top:50px;
+        padding-top:100px;
     }
     .file-container{
         margin-left:0px;
@@ -907,6 +924,8 @@ button:hover {
     .breadcrumb-title {
         margin-top:-20px;
         margin-left:60px;
+        position:relative;
+        width:0;
     }
     #bch .breadcrumb {
         margin-top:-75px;

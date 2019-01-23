@@ -8,12 +8,12 @@ function list_dirs() {
         echo "<div class='box-container'>
                 <div class='box-del' id=\"./?boxdel=".rawurlencode($file_orig)."\">X</div>";
         if ($file == "Movies"){
-            echo "<a id='dbmo' class='dir-box' href='./".$file_orig."/'>$file</a>";
+            echo "<a id='dbmo' class='dir-box' href='./".$file_orig."/'><span>$file</span></a>";
         } else if ($file == "TV") {
-            echo "<a id='dbtv' class='dir-box' href='./".$file_orig."/'>$file</a>";
+            echo "<a id='dbtv' class='dir-box' href='./".$file_orig."/'><span>$file</span></a>";
         } else if ($file == "Music") {
-            echo "<a id='dbmu' class='dir-box' href='./".$file_orig."/'>$file</a>";
-        } else {echo "<a class='dir-box' href='./".rawurlencode($file_orig)."/'>".rawurldecode($file)."</a>";}
+            echo "<a id='dbmu' class='dir-box' href='./".$file_orig."/'><span>$file</span></a>";
+        } else {echo "<a class='dir-box' href='./".rawurlencode($file_orig)."/'><span>".rawurldecode($file)."</span></a>";}
         
         echo "</div>";
     }
@@ -79,6 +79,7 @@ function list_files() {
                             <div class='item-ren'>A</div>
                             <a class='item-dl' href=\"?itemdl=".rawurlencode($file)."\"><img src='/.Images/dl.png' /></a>
                             <p class='fip $cutoff'>".rawurldecode($file_new)."</p>
+                            <div class='loading' style='display:none;'></div>
                         </div>
                       </div>";
             }
@@ -177,10 +178,8 @@ function breadcrumbs(){
                 $b .= '/';
                 continue;
             }
-            $margin = strlen($l) * 7;
-            if ($margin > 75){
-                $margin = "style='margin-right:".($margin/2)."px;margin-left:".$margin."px;'";
-            }
+            $margin = (strlen($l) * 3) + 25;
+            $margin = "style='margin-right:".$margin."px;margin-left:".$margin."px;'";
             $l_repl = str_replace("~"," ",$l);
             echo "<a $margin class='bc_c' href='".$b."/'>
                         <div class='breadcrumb'></div>
@@ -194,7 +193,7 @@ function breadcrumbs(){
 function get_metadata($term){
     $cache = file('metadata.log');
     for ($i = 0; $i < count($cache); $i++){
-        if (strpos($cache[$i], $term) !== false){
+        if ($cache[$i] === $term) {
             echo $cache[$i+1];
             return;
         } 
