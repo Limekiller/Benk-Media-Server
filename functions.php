@@ -105,6 +105,7 @@ function add_file($files, $file_name) {
 //Upload a file via the browser
     if ($files['name'][0] == ''){
             echo "<div class='notify'>Please select a file to upload.</div>";
+            error_log('ah');
             return false;
     }
     foreach ($files['name'] as $f => $name){
@@ -121,6 +122,7 @@ function add_file($files, $file_name) {
         if (file_exists($target_file)) {
             echo "<div class='notify'>Sorry, file already exists.</div>";
             $file_upload = 0;
+            return false;
         }
     
         //Verify that the file is audio or video
@@ -129,11 +131,13 @@ function add_file($files, $file_name) {
         if (!(strpos($mime, 'video') !== false) && !(strpos($mime, 'audio') !== false)) {
             $file_upload = 0;
             echo "<div class='notify'>This server only supports audio and video files.</div>"; 
+            return false;
         }
     
         if ($file_upload == 1) {
             if (move_uploaded_file($files["tmp_name"][$f], $target_file)){
                 echo "<div class='notify'>Your file was uploaded successfully!</div>";
+                return true;
             }
         }
     }

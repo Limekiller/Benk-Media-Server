@@ -807,8 +807,8 @@ button:hover {
     z-index:99;
     right:0;
     position:fixed;
+    transition:margin-top 0.4s ease;
 }
-
 
 /*DASHBOARD PAGE*/
 #dl_container {

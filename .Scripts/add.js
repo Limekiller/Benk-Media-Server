@@ -73,10 +73,10 @@ $(document).ready(function(){
     $('.view-tog').on('click', function() {
         if (view == 0){
            $('.file-container').addClass('file-container-transition');
+            $(this).addClass('view-tog-v');
             setTimeout(function() {
                view = 1;
                $('.span_fileitem').empty();
-               $(this).addClass('view-tog-v');
                $('.item-container').addClass('item-container-art');
                $('.item-container').addClass('tooltip');
                $('.item-ren, .item-del').addClass('item-v');
@@ -93,9 +93,9 @@ $(document).ready(function(){
            }, 500);
         } else {
            $('.file-container').addClass('file-container-transition');
+            $(this).removeClass('view-tog-v');
            setTimeout(function() {
                view = 0;
-               $(this).removeClass('view-tog-v');
                $('.file-item').removeClass('file-item-art');
                $('.item-container').removeClass('tooltip');
                $('.item-container').removeClass('item-container-art');

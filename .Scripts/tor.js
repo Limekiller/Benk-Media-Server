@@ -64,6 +64,8 @@ function get_results(method){
     });
 }
 
+var notifNum = -1;
+
 //Initiates download of chosen file
 function grab_dl(title, method){
     if (method == 'dl'){
@@ -76,13 +78,17 @@ function grab_dl(title, method){
         context: document.body
     }).done(function(data) {
         $('body').removeClass('dnf-body');
+        notifNum += 1;
         if (data == "success"){
             $('.result').removeClass('result_loading');
-            $(document.body).prepend("<div class='notify'>Your download will start soon!</div>");
+            $(document.body).prepend("<div class='notify njs'>Your download will start soon!</div>");
         } else if (data == "error") {
             $('.result').removeClass('result_loading');
-            $(document.body).prepend("<div class='notify'>An error has occurred. Please try again.</div>");
+            $(document.body).prepend("<div class='notify njs'>An error has occurred. Please try again.</div>");
         }
+        $('.njs').each(function(index){
+            $(this).css('margin-top', 100*index);
+        });
     });
 }
 

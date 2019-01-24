@@ -17,9 +17,9 @@ session_start();
         header('Location: '.$dir);
     }
     if (isset($_POST['fn'])){
-       add_file($_FILES['uf'],$_POST["fn"]); 
        $del = 0;
-       header('Location: '.$dir);
+       add_file($_FILES['uf'],$_POST["fn"]);
+        
     }
     if (isset($_GET['itemdel'])) {
         $item = $_GET['itemdel'];
