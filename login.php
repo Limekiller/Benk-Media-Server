@@ -6,7 +6,7 @@ session_start();
         header("Location: /");
     }
     if (isset($_POST['pw'])){
-        if ($_POST['pw'] == 'bob'){
+        if ($_POST['pw'] == 'PotHouse2019!'){
             $_SESSION['logged_in'] = 1;
             error_log($_SESSION['logged_in']);
             header("Location: /");

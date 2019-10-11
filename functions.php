@@ -205,25 +205,41 @@ function get_metadata($term){
 
     $ch1 = strtolower($term[0]);
     $jsonurl = "http://sg.media-imdb.com/suggests/".$ch1."/".$term.".json";
-    $json = file_get_contents($jsonurl);
-    $start_char = 0;
-    
-    for ($i = 0; $i < strlen($json); $i++){
-        if ($json[$i] != '{'){
-            $start_char++;
-        } else {
+
+    $json = json_decode(substr(strstr(file_get_contents($jsonurl), '{'), 0, -1), true);
+
+    $json_result = null;
+
+    foreach ($json["d"] as $movie) {
+        if ($movie['l'] == $term) {
+            $json_result = $movie;            
             break;
         }
     }
-    $json = substr($json, $start_char, strlen($json)-$start_char-1);
 
-    if (strpos($json, '"d"') == false){
-        echo $json;
-        return;
+    if ($json_result == null) {
+        $json_result = $json["d"];
     }
 
-    exec("echo ".escapeshellarg($term).'"\n"'.escapeshellarg($json)." >> metadata.log");
-    echo $json;
+    exec("echo ".escapeshellarg($term).'"\n"'.escapeshellarg($json_result).">> metadata.log");
+    echo json_encode($json_result);
+
+    //$start_char = 0;
+    //
+    //for ($i = 0; $i < strlen($json); $i++){
+    //    if ($json[$i] != '{'){
+    //        $start_char++;
+    //    } else {
+    //        break;
+    //    }
+    //}
+    //$json = substr($json, $start_char, strlen($json)-$start_char-1);
+
+    //if (strpos($json, '"d"') == false){
+    //    echo $json;
+    //    return;
+    //}
+
 }
 
 function get_description($id) {
