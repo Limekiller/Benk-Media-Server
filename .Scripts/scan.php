@@ -68,10 +68,13 @@ while(True){
         $locations[$gid][1] = 0;
     }
 
-    foreach ($aria2->tellActive(["status","gid","dir","completedLength","totalLength"])['result'] as $result){
+    foreach ($aria2->tellActive(["status","gid","dir","completedLength","totalLength","uploadSpeed","verifiedLength"])['result'] as $result){
 
         $gid = $result['gid'];
         $dir = $result['dir'];
+        $status = $result['status'];
+        print_r($status);
+        print_r($result);
 
         // When deletion is triggered, it creates a file as "directoryname.downloadGID".
         // Check if this file exists, and if so, remove download from Aria2 and clean up files
@@ -89,7 +92,9 @@ while(True){
         $total = $result['totalLength'];
         $percent = round($amount_done / $total, 2) * 100;
 
-        if ($percent == 100){
+        if ($percent == 100) {
+            $percent = "Validating...";
+            sleep(10);
             unlink("$dir.in_progress");
             exec("chown -R www-data:www-data '$dir'");
             remove_non_av($dir, $locations[$gid][0]);
@@ -129,10 +134,14 @@ while(True){
                 exec("mv '../.Partial/$object.start' '../.Partial/$object.in_progress'");
                 $aria2->addUri(
                     [$file_contents[0]],
-                    ['dir'=>"/var/www/media.bryceyoder.com/.Partial/$object",
-                    'seed-time'=>0]);
+                    [
+                        'checkIntegrity'=>true,
+                        'realtime-chunk-checksum'=>true,
+                        'dir'=>"/var/www/media.bryceyoder.com/.Partial/$object",
+                        'seed-time'=>0
+                    ]
+                );
             }
-
         }
     }
     sleep(5);

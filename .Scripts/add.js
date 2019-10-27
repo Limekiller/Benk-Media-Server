@@ -1,4 +1,4 @@
-view = 0;
+view = 1;
 
 $(document).ready(function(){
 
@@ -45,18 +45,6 @@ $(document).ready(function(){
     //Get movie data from IMDb
     var get_meta;
     var meta;
-    if (window.location.pathname.indexOf('Movies') > -1 || window.location.pathname.indexOf('TV')){
-        $('.item-container').hover(function () {
-            if (view == 0 && screen.width >= 760){
-                var here = $(this);
-                get_meta = setTimeout(meta=get_metadata, 1500, $(this).children('.file-item').children('.fip').html(), $(this).children('.file-item').attr('id'), view);
-            }
-        }, function () {
-            clearTimeout(get_meta);
-            $(this).children('.file-item').removeClass('file-item-active');
-            $(this).children('.file-item').children('.details').remove();
-        });
-    }
 
     //Mobile style changey stuff
     if ($(window).width() < 760){
@@ -69,6 +57,10 @@ $(document).ready(function(){
             $('.breadcrumbs').css("margin-top", "50px");
         }});
 
+    // Load movie info on first load
+    $('.file-item').each(function(i, obj){
+        get_metadata($(obj).children('.fip').html(), $(obj).attr('id'), view);
+    });
     //Toggle viewstyle
     $('.view-tog').on('click', function() {
         if (view == 0){
@@ -414,7 +406,6 @@ function get_metadata(term, id, view){
 
 function plot_summary(id, data, term){
     //Plot summary isn't part of data, so use returned ID to scrape the page for the plot summary
-    console.log(data);
     var imdbid = data['id'];
     var img = data['i'];
     var year = data['y'];

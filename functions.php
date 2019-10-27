@@ -47,7 +47,7 @@ function list_files() {
             }
 
             if ($current_letter == '-'){
-                echo "<div class='view-tog'>
+                echo "<div class='view-tog view-tog-v'>
                         <div class='view-tog-bar'></div>
                         <div class='view-tog-bar'></div>
                         <div class='view-tog-bar'></div>
@@ -72,14 +72,14 @@ function list_files() {
             {
                 $vid_id += 1;
                 echo "<div id='vid$vid_id' class='video-container'></div>
-                        <div class='item-container'>
+                        <div class='item-container item-container-art tooltip'>
                         <span id='span_fileitem$vid_id' class='span_fileitem'></span>
-                        <div id='fileitem$vid_id' $color onclick='play($vid_id, \"".rawurlencode($file)."\", \"name\")' class='file-item' >
-                            <a class='item-del' href=\"?itemdel=".rawurlencode($file)."\">X</a>
-                            <div class='item-ren'>A</div>
-                            <a class='item-dl' href=\"?itemdl=".rawurlencode($file)."\"><img src='/.Images/dl.png' /></a>
+                        <div id='fileitem$vid_id' $color onclick='play($vid_id, \"".rawurlencode($file)."\", \"name\")' class='file-item file-item-art' >
+                            <a class='item-del item-v' href=\"?itemdel=".rawurlencode($file)."\">X</a>
+                            <div class='item-ren item-v'>A</div>
+                            <a class='item-dl' href=\"?itemdl=".rawurlencode($file)."\"><img class='item-dlv' src='/.Images/dl.png' /></a>
                             <p class='fip $cutoff'>".rawurldecode($file_new)."</p>
-                            <div class='loading' style='display:none;'></div>
+                            <div class='loading' style='display:inherit;'></div>
                         </div>
                       </div>";
             }

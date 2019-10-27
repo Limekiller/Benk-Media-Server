@@ -71,10 +71,11 @@ session_start();
             </div>";
             $dir_name = str_replace("~"," ",basename(__DIR__));
             echo "<h1 class='page_title'>".rawurldecode($dir_name)."</h1>";
-        } else {
-                echo "<form class='search-form' action='search.php' >
-                        <input type='text' name='search'><br /><br />
-                        <input type='submit' value='Search'></form>";
+        } else { ?>
+                <form class='search-form' action='search.php' >
+                <input type='text' name='search'><br /><br />
+                <input type='submit' value='Search'></form>
+                <?php
                 $dt = round(disk_total_space("/")/1000000000,1);
                 $df = round(disk_free_space("/")/1000000000,1);
                 if (($dt - $df) >= ($dt * 0.9)){
@@ -117,37 +118,38 @@ session_start();
             <img style='margin-left:15px;margin-top:15px;width:60%;height:60%;' src='/.Images/plus.png' />
         </div>
     </div>
-    <?php if ($dir != "/"){ echo "
-    <div class=\"dnf_container\">
-        <div class=\"dnf\">
-            <div id='dnfc' class=\"close\">X</div>
+    <?php if ($dir != "/"){ ?>
+    <div class="dnf_container">
+        <div class="dnf">
+            <div id='dnfc' class="close">X</div>
             <div class='t-chooser'>
                 <div id='tc1' class='t-choice t-choice-active'></div>
                 <div id='tc2' class='t-choice'></div>
             </div>
             <h2>Download New Media</h2>
             <h3>Title</h3>
-            <input type=\"text\" name=\"dn\" id=\"dn\"><br />
-            <button id='dnb' onclick=\"get_results('dl')\" >Search</button> 
+            <input type="text" name="dn" id="dn"><br />
+            <button id='dnb' onclick="get_results('dl')" >Search</button> 
             <div id='result_container'>
             </div>
         </div>
     </div>
-    <div class=\"um_container\">
-        <div class=\"um\">
-            <div id='umc' class=\"close\">X</div>
+    <div class="um_container">
+        <div class="um">
+            <div id='umc' class="close">X</div>
             <h2>Upload Media</h2>
-            <form id=\"um_form\" method=\"post\" enctype=\"multipart/form-data\">
+            <form id="um_form" method="post" enctype="multipart/form-data">
                 <h3 id='file_name_label'>File Name</h3>
-                <input id='file_name' type=\"text\" name=\"fn\"><br>
+                <input id='file_name' type="text" name="fn"><br>
                 <h3>Upload File</h3>
-                <div class=\"fsubmit\">
-                    <input type=\"file\" multiple=\"multiple\" name=\"uf[]\">
+                <div class="fsubmit">
+                    <input type="file" multiple="multiple" name="uf[]">
                 </div>
-                <input id='f_upload_s' type=\"submit\" value=\"Submit\">
+                <input id='f_upload_s' type="submit" value="Submit">
             </form>
         </div>
-    </div>";}?>
+    </div>
+    <?php }?>
     <div class="um_cover">
         <div class="loading"></div>
         <h1>Uploading...</h1>
