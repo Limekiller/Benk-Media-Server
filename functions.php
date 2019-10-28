@@ -18,7 +18,6 @@ function list_dirs() {
         echo "</div>";
     }
 }
-
 function list_files() {
 //List all files in a location
     $files = array_diff(scandir('.'), array('.','..','index.php'));
@@ -45,7 +44,6 @@ function list_files() {
                     $color = 'style=\'color:black;\'';
                 }
             }
-
             if ($current_letter == '-'){
                 echo "<div class='view-tog view-tog-v'>
                         <div class='view-tog-bar'></div>
@@ -56,12 +54,10 @@ function list_files() {
                 echo "<div class='letter-head-tog'>abc</div>";
                 echo '<div class="file-container">';
             }
-
             if (strtolower(substr($file, 0, 1)) != strtolower($current_letter)){
                 $current_letter = substr($file, 0, 1);
                 echo "<div id='".strtolower($current_letter)."' class='letter-head'>".strtoupper($current_letter)."</div>";
             } 
-
             $file_new = explode(".",$file);
             array_pop($file_new);
             $cutoff = '';
@@ -109,11 +105,9 @@ function add_file($files, $file_name) {
             return false;
     }
     foreach ($files['name'] as $f => $name){
-
         if ($file_name == ""){
             $new_file_name = $name;
         } else {$new_file_name = $file_name;}
-
         $imageFileType = strtolower(pathinfo($name,PATHINFO_EXTENSION));
         $target_file = "./".rawurlencode($new_file_name).".".$imageFileType;
         $file_upload = 1;
@@ -142,7 +136,6 @@ function add_file($files, $file_name) {
         }
     }
 }
-
 function removedir($dir){
 //Remove directories and contents recursively
     if(is_dir($dir)) {
@@ -156,7 +149,6 @@ function removedir($dir){
         rmdir($dir);
     }
 }
-
 function breadcrumbs(){
 //Generate a breadcrumb naviagtion trail
     echo "<a id='bch' class='bc_c' href='/'>
@@ -178,7 +170,6 @@ function breadcrumbs(){
                 break;
             }
             if (substr($b, -1) == '/' || $index == 0){
-
                 $b .= '/';
                 continue;
             }
@@ -195,51 +186,43 @@ function breadcrumbs(){
 }
 
 function get_metadata($term){
-    $cache = file('metadata.log');
-    for ($i = 0; $i < count($cache); $i++){
-        if ($cache[$i] === $term) {
-            echo $cache[$i+1];
-            return;
-        } 
-    } 
+    $cache = fopen('metadata.log', 'r');
+    if ($cache) {
+        $matches = false;
+        while (($line = fgets($cache)) !== false) {
+            if ($matches) {
+                print_r(json_encode([$line, 1]));
+                fclose($cache);
+                return;
+            }
+
+            if ($line == $term."\n") {
+                $matches = true;
+            }
+        }
+    }
 
     $ch1 = strtolower($term[0]);
     $jsonurl = "http://sg.media-imdb.com/suggests/".$ch1."/".$term.".json";
-
     $json = json_decode(substr(strstr(file_get_contents($jsonurl), '{'), 0, -1), true);
-
     $json_result = null;
-
     foreach ($json["d"] as $movie) {
-        if ($movie['l'] == $term) {
+        if (strtolower($movie['l']) == strtolower($term)) {
             $json_result = $movie;            
             break;
         }
     }
 
     if ($json_result == null) {
-        $json_result = $json["d"];
+        $json_result = $json["d"][0];
     }
 
-    exec("echo ".escapeshellarg($term).'"\n"'.escapeshellarg($json_result).">> metadata.log");
-    echo json_encode($json_result);
+    if ($json_result != null && !exec('grep '.escapeshellarg($term).' metadata.log')) {
+        exec("wget -O .Images/cache/".escapeshellarg($term).".jpg '".$json_result['i'][0]."' &");
+        exec("echo ".escapeshellarg($term).'"\n"'.escapeshellarg(json_encode($json_result)).">> metadata.log");
+    }
 
-    //$start_char = 0;
-    //
-    //for ($i = 0; $i < strlen($json); $i++){
-    //    if ($json[$i] != '{'){
-    //        $start_char++;
-    //    } else {
-    //        break;
-    //    }
-    //}
-    //$json = substr($json, $start_char, strlen($json)-$start_char-1);
-
-    //if (strpos($json, '"d"') == false){
-    //    echo $json;
-    //    return;
-    //}
-
+    print_r(json_encode([json_encode($json_result), 0]));
 }
 
 function get_description($id) {
@@ -259,7 +242,6 @@ if (isset($_POST['dest'])){
     if (count(explode("/", rawurldecode($_POST['source']))) > 2){
         $end_dest = end(explode("/", rawurldecode($_POST['source'])));
     } else {$end_dest = rawurldecode($_POST['source']);}
-
     rename('.'.rawurldecode($_POST['source']),'.'.rawurldecode($_POST['dest']).'/'.$end_dest);
 }
 if (isset($_POST['file_q'])){

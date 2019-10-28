@@ -361,7 +361,7 @@ $(document).ready(function(){
 // Get movie info from IMDb database
 function get_metadata(term, id, view){
 
-    setTimeout(noIMDB(id));
+    var timeout = setTimeout(noIMDB(id));
 
     //Attempt to get info based on title
     $.ajax({
@@ -371,12 +371,12 @@ function get_metadata(term, id, view){
         context: document.body
     }).done(function(data){
 
-        data_1 = JSON.parse(data);
-        // The title worked fine by itself
-        if (data_1 != null) {
-            console.log(data_1);
-            plot_summary(id, data_1, term);
-        } else {
+        try {
+            data = JSON.parse(data);
+            data_1 = JSON.parse(data[0]);
+            plot_summary(id, data_1, term, data[1], timeout);
+
+        } catch (e) {
 
             // If no results were found, split the title at the first number and try again
             // The title might be in standard torrent title format and shortening it may produce results
@@ -388,6 +388,7 @@ function get_metadata(term, id, view){
                     newterm = newterm+term[i];
                 }
             }
+
             $.ajax({
                 url: '/functions.php',
                 data: {term_q: newterm},
@@ -395,22 +396,36 @@ function get_metadata(term, id, view){
                 context: document.body
             }).done(function(data){
 
-                data_1 = JSON.parse(data);
+                data = JSON.parse(data);
+                data_1 = JSON.parse(data[0]);
+                console.log(data_1);
+
                 // Get plot summary with new data
-                plot_summary(id, data_1[0], newterm);
+                plot_summary(id, data_1, newterm, data[1], timeout);
             });
         }
 
     });
 }
 
-function plot_summary(id, data, term){
+function plot_summary(id, data, term, image_exists, timeout){
     //Plot summary isn't part of data, so use returned ID to scrape the page for the plot summary
     var imdbid = data['id'];
-    var img = data['i'];
     var year = data['y'];
     var star = data['s'];
     var title = term;
+    if (image_exists) {
+        var img = '/.Images/cache/'+term+'.jpg';
+        $('#'+id).css('background-image', 'url("'+img+'")');
+        $('#'+id).css('background-size', 'cover');
+        $('#span_'+id).append('<div class="desc"><h1>'+title+'</h1><h2>'+year+'</h2><h3>'+star+'</h3></div>');
+        $('#'+id+' .loading').css('display', 'none');
+        clearTimeout(timeout);
+    } else {
+        console.log(data);
+        var img = data['i'];
+    }
+
     $.ajax({
         url: '/functions.php',
         data: {imdbid_q: imdbid},
@@ -427,25 +442,29 @@ function plot_summary(id, data, term){
             $('#'+id).append("<div class='details'><img src='"+img+"' /><div class='desc'><h2>"+year+"</h2><h3>"+star+"</h3></div></div>");
             $('#'+id).children('.details').children('.desc').append('<p>'+data+'</p>');
         } else {
-            $('#'+id).css('background-image', 'url('+img+')');
-                    $('#'+id).css('background-size', 'cover');
-                    $('#span_'+id).append('<div class="desc"><h1>'+title+'</h1><h2>'+year+'</h2><h3>'+star+'</h3><p>'+data+'</div></div>');
-                    }
-                    });
+            if (image_exists) {
+                $('#span_'+id+' .desc').append('<p>'+data+'</p>');
+            } else {
+                $('#'+id).css('background-image', 'url("'+img+'")');
+                $('#'+id).css('background-size', 'cover');
+                $('#span_'+id).append('<div class="desc"><h1>'+title+'</h1><h2>'+year+'</h2><h3>'+star+'</h3><p>'+data+'</div></div>');
             }
+        }
+    });
+}
 
-            function noIMDB(id) {
-                setTimeout(function() {
-                    if ($('#'+id+' .loading').css('display') != 'none') {
-                        $('#'+id+' .loading').css('display', 'none');
-                        $('#'+id+' .loading').siblings('.fip').css('color', 'black');
-                        $('#'+id+' .loading').siblings('.fip').css('font-size', '25px');
-                        $('#'+id+' .loading').siblings('.fip').css('white-space', 'normal');
-                        $('#'+id+' .loading').siblings('.fip').css('width', '180px');
-                        $('#'+id).css('opacity', '0.5');
-                    }
-                }, 10000);
-            }
+function noIMDB(id) {
+    setTimeout(function() {
+        if ($('#'+id+' .loading').css('display') != 'none') {
+            $('#'+id+' .loading').css('display', 'none');
+            $('#'+id+' .loading').siblings('.fip').css('color', 'black');
+            $('#'+id+' .loading').siblings('.fip').css('font-size', '25px');
+            $('#'+id+' .loading').siblings('.fip').css('white-space', 'normal');
+            $('#'+id+' .loading').siblings('.fip').css('width', '180px');
+            $('#'+id).css('opacity', '0.5');
+        }
+    }, 10000);
+}
 
 function rename(file, name) {
     file_prefix = window.location.pathname;
