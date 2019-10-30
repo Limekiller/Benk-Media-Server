@@ -68,7 +68,12 @@ while(True){
         $locations[$gid][1] = 0;
     }
 
-    foreach ($aria2->tellActive(["status","gid","dir","completedLength","totalLength","uploadSpeed","verifiedLength"])['result'] as $result){
+    $active = $aria2->tellActive(["status","gid","dir","completedLength","totalLength","uploadSpeed","verifiedLength"]); 
+    $waiting = $aria2->tellWaiting(["status","gid","dir","completedLength","totalLength","uploadSpeed","verifiedLength"]); 
+    $stopped = $aria2->tellStopped(["status","gid","dir","completedLength","totalLength","uploadSpeed","verifiedLength"]); 
+
+    //foreach ($aria2->tellActive(["status","gid","dir","completedLength","totalLength","uploadSpeed","verifiedLength"])['result'] as $result){
+    foreach (array_merge($active, $waiting, $stopped)['result'] as $result){
 
         $gid = $result['gid'];
         $dir = $result['dir'];
@@ -93,8 +98,6 @@ while(True){
         $percent = round($amount_done / $total, 2) * 100;
 
         if ($percent == 100) {
-            $percent = "Validating...";
-            sleep(10);
             unlink("$dir.in_progress");
             exec("chown -R www-data:www-data '$dir'");
             remove_non_av($dir, $locations[$gid][0]);
