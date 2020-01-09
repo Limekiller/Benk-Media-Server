@@ -3,7 +3,7 @@ Media server webapp built on LAMP that stores, downloads, streams, and allows th
 
 To begin:
 
-aria2, ffmpeg, and php-xml must be installed
+aria2, ffmpeg, php-xml, and php-gd must be installed
 
 scan.php must be given the correct full path to run Aria2 on multiple lines and run in the background (php benk-media-server/.Scripts/scan.php 2>&1 /dev/null &)
 
