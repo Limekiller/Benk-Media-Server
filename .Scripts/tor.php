@@ -5,7 +5,7 @@ function get_results($site, $query){
     libxml_use_internal_errors(true);
 
     if ($site == 'tc1'){
-        $html = file_get_contents('https://pirateproxy.gdn/search/'.rawurlencode($query).'/0/99/0');
+        $html = file_get_contents('https://thepiratebay.org/search/'.rawurlencode($query).'/0/99/0');
     } else if ($site == 'tc2'){
         $query = str_replace(" ", "-", $query);
         $html = file_get_contents('https://www.magnetdl.com/'.substr($query,0,1).'/'.rawurlencode($query).'/se/desc/');

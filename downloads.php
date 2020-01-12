@@ -20,7 +20,7 @@ session_start();
             <img style="width:70%;transform:rotate(-45deg);margin-top:6px;margin-left:5px;"src="/.Images/home.svg">
         </div>
     </a>
-    <h1 style='padding-left:50px;'>Downloads</h1>
+    <h1 style='padding-left:100px;'>Downloads</h1>
     <div id='dl_container'></div>
 </body>
 </html>

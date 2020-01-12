@@ -57,8 +57,10 @@ session_start();
     <link rel="stylesheet" href="/video-js.css">
     <script src="/.Scripts/add.js"></script>
     <script src="/.Scripts/tor.js"></script>
+    <script src="https://kit.fontawesome.com/811c217a74.js" crossorigin="anonymous"></script>
 </head>
 <body>
+    <div id='vid' class='video-container'></div>
     <?php
         if ($dir != "/"){
             echo "<div class='mobile-bc-tog'>. . .</div>";

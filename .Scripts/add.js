@@ -59,7 +59,7 @@ $(document).ready(function(){
 
     // Load movie info on first load
     $('.file-item').each(function(i, obj){
-        get_metadata($(obj).children('.fip').html(), $(obj).attr('id'), view);
+        get_metadata($(obj).children('.fip').html(), $(obj).attr('id'), view, false);
     });
     //Toggle viewstyle
     $('.view-tog').on('click', function() {
@@ -77,7 +77,7 @@ $(document).ready(function(){
                 $('.file-item .loading').css('display','inherit');
                 $('.file-item span').css('padding', '50px');
                 $('.file-item').each(function(i, obj){
-                    get_metadata($(obj).children('.fip').html(), $(obj).attr('id'), view);
+                    get_metadata($(obj).children('.fip').html(), $(obj).attr('id'), view, false);
                 });
             }, 100);
             setTimeout(function(){
@@ -359,7 +359,7 @@ $(document).ready(function(){
 });
 
 // Get movie info from IMDb database
-function get_metadata(term, id, view){
+function get_metadata(term, id, view, overlay){
 
     var timeout = setTimeout(noIMDB(id));
 
@@ -368,13 +368,14 @@ function get_metadata(term, id, view){
         url: '/functions.php',
         data: {term_q: term},
         type: 'POST',
-        context: document.body
+        context: document.body,
     }).done(function(data){
 
         try {
             data = JSON.parse(data);
             data_1 = JSON.parse(data[0]);
-            plot_summary(id, data_1, term, data[1], timeout);
+            console.log(data_1);
+            plot_summary(id, data_1, term, data[1], timeout, overlay);
 
         } catch (e) {
 
@@ -401,18 +402,19 @@ function get_metadata(term, id, view){
                 console.log(data_1);
 
                 // Get plot summary with new data
-                plot_summary(id, data_1, newterm, data[1], timeout);
+                plot_summary(id, data_1, newterm, data[1], timeout, overlay);
             });
         }
 
     });
 }
 
-function plot_summary(id, data, term, image_exists, timeout){
+function plot_summary(id, data, term, image_exists, timeout, overlay){
     //Plot summary isn't part of data, so use returned ID to scrape the page for the plot summary
     var imdbid = data['id'];
     var year = data['y'];
     var star = data['s'];
+    var realtitle = data['l'];
     var title = term;
     if (image_exists) {
         var img = '/.Images/cache/'+term+'.jpg';
@@ -437,19 +439,24 @@ function plot_summary(id, data, term, image_exists, timeout){
         $('.fip').removeAttr('style');
         $('#'+id).css('opacity', '1');
         $('#'+id+' .loading').css('display', 'none');
-        if (view == 0){
-            expand = $('#'+id).addClass('file-item-active');
-            $('#'+id).append("<div class='details'><img src='"+img+"' /><div class='desc'><h2>"+year+"</h2><h3>"+star+"</h3></div></div>");
-            $('#'+id).children('.details').children('.desc').append('<p>'+data+'</p>');
+        if (image_exists) {
+            $('#span_'+id+' .desc').append('<p>'+data+'</p>');
         } else {
-            if (image_exists) {
-                $('#span_'+id+' .desc').append('<p>'+data+'</p>');
-            } else {
-                $('#'+id).css('background-image', 'url("'+img+'")');
-                $('#'+id).css('background-size', 'cover');
-                $('#span_'+id).append('<div class="desc"><h1>'+title+'</h1><h2>'+year+'</h2><h3>'+star+'</h3><p>'+data+'</div></div>');
-            }
+            $('#'+id).css('background-image', 'url("'+img+'")');
+            $('#'+id).css('background-size', 'cover');
+            $('#span_'+id).append('<div class="desc"><h1>'+title+'</h1><h2>'+year+'</h2><h3>'+star+'</h3><p>'+data+'</div></div>');
         }
+
+        if (overlay) {
+            $("#vid_info_overlay .loading").remove();
+            $("#overlay_img").attr("src", img);
+            $("#overlay_title").html(realtitle);
+            $("#overlay_year").html(year);
+            $("#overlay_stars").html(star);
+            $("#overlay_desc").html(data);
+            $("#overlay_link").html(decodeURIComponent(title));
+        }
+
     });
 }
 
@@ -518,9 +525,11 @@ $(function() {
     $(".breadcrumb,.box-container").droppable({
         over: function(event, ui) {
             $('.ui-draggable-dragging .dir-box').parent().addClass('hover-active');
+            $('.ui-draggable-dragging.item-container').addClass('hover-active');
         },
         out: function(event, ui) {
             $('.ui-draggable-dragging .dir-box').parent().removeClass('hover-active');
+            $('.ui-draggable-dragging.item-container').removeClass('hover-active');
         },
         tolerance: 'pointer',
 

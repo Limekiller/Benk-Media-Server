@@ -66,18 +66,24 @@ function list_files() {
                 $cutoff = 'fade-out'; 
             }
             {
-                $vid_id += 1;
-                echo "<div id='vid$vid_id' class='video-container'></div>
-                        <div class='item-container item-container-art tooltip'>
-                        <span id='span_fileitem$vid_id' class='span_fileitem'></span>
-                        <div id='fileitem$vid_id' $color onclick='play($vid_id, \"".rawurlencode($file)."\", \"name\")' class='file-item file-item-art' >
-                            <a class='item-del item-v' href=\"?itemdel=".rawurlencode($file)."\">X</a>
-                            <div class='item-ren item-v'>A</div>
-                            <a class='item-dl' href=\"?itemdl=".rawurlencode($file)."\"><img class='item-dlv' src='/.Images/dl.png' /></a>
-                            <p class='fip $cutoff'>".rawurldecode($file_new)."</p>
-                            <div class='loading' style='display:inherit;'></div>
+                $vid_id += 1; ?>
+                    <div class='item-container item-container-art tooltip'>
+                    <span id='span_fileitem<?php echo $vid_id; ?>' class='span_fileitem'></span>
+                    <div id='fileitem<?php echo $vid_id; ?>' <?php echo $color; ?> onclick='play(<?php echo $vid_id;?>, "<?php echo rawurlencode($file) ?>", name)' class='file-item file-item-art' >
+                        <a class='item-del item-v' href="?itemdel=<?php echo rawurlencode($file)?>">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                        <div class='item-ren item-v'>
+                            <i class="fas fa-font"></i>
                         </div>
-                      </div>";
+                        <a class='item-dl item-v' href="?itemdl=<?php echo rawurlencode($file)?>">
+                            <i class="fas fa-download"></i>
+                        </a>
+                        <p class='fip <?php echo $cutoff?>'><?php echo rawurldecode($file_new)?></p>
+                        <div class='loading' style='display:inherit;'></div>
+                    </div>
+                </div>
+            <?php
             }
         }
     }
@@ -101,7 +107,6 @@ function add_file($files, $file_name) {
 //Upload a file via the browser
     if ($files['name'][0] == ''){
             echo "<div class='notify'>Please select a file to upload.</div>";
-            error_log('ah');
             return false;
     }
     foreach ($files['name'] as $f => $name){
@@ -186,6 +191,8 @@ function breadcrumbs(){
 }
 
 function get_metadata($term){
+
+    $term = urldecode($term);
     $cache = fopen('metadata.log', 'r');
     if ($cache) {
         $matches = false;
@@ -218,7 +225,10 @@ function get_metadata($term){
     }
 
     if ($json_result != null && !exec('grep '.escapeshellarg($term).' metadata.log')) {
-        exec("wget -O .Images/cache/".escapeshellarg($term).".jpg '".$json_result['i'][0]."' &");
+        $location = escapeshellarg('.Images/cache/'.$term.'.jpg');
+        error_log($location);
+        exec("wget -O $location ".$json_result['i'][0]." &");
+        imagejpeg(imagecreatefromjpeg($location), $location, 50);
         exec("echo ".escapeshellarg($term).'"\n"'.escapeshellarg(json_encode($json_result)).">> metadata.log");
     }
 

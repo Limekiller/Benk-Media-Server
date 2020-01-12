@@ -1,17 +1,5 @@
 <?php
 
-// Recursively copies the index.php file into directories (no longer needed -- can probably be deleted)
-function copy_index($dir){
-    copy("../index.php", "$dir/index.php");
-    $objects = scandir($dir);
-    foreach ($objects as $object) {
-        if($object != '.' && $object != '..' && is_dir("$dir/$object")){
-            copy_index("$dir/$object");
-        }
-    }
-    reset($objects);
-}
-
 // Recursively searches directory for video files and moves them to download location
 function remove_non_av($dir, $destination){
     if(is_dir($dir)){
@@ -39,11 +27,8 @@ function remove_non_av($dir, $destination){
                         //    rename($dir.'/'.$object_new.'.mp4', '/var/www/media.bryceyoder.com'.$destination.'/'.$object_new.'.mp4');
                         //} else { rename($dir.'/'.$object, '/var/www/media.bryceyoder.com'.$destination.'/'.$object_new); }
 
-                        // Run file through file validation script
                         $new_dest = '/var/www/media.bryceyoder.com'.$destination.'/'.rawurlencode($object).'.mp4';
                         rename($dir.'/'.$object, $new_dest); 
-                        // This script checks the file and determines if it's broken or not. Disabled right now
-                        // exec("bash video_validation.sh '$new_dest'");
                     }
                 } else { remove_non_av($dir.'/'.$object, $destination); }
             }
@@ -68,6 +53,8 @@ while(True){
         $locations[$gid][1] = 0;
     }
 
+    // This is under test... Not sure if this will work well or not.
+    // TODO: Add pause function
     $active = $aria2->tellActive(["status","gid","dir","completedLength","totalLength","uploadSpeed","verifiedLength"]); 
     $waiting = $aria2->tellWaiting(["status","gid","dir","completedLength","totalLength","uploadSpeed","verifiedLength"]); 
     $stopped = $aria2->tellStopped(["status","gid","dir","completedLength","totalLength","uploadSpeed","verifiedLength"]); 
