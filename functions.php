@@ -192,7 +192,6 @@ function breadcrumbs(){
 
 function get_metadata($term){
 
-    $term = urldecode($term);
     $cache = fopen('metadata.log', 'r');
     if ($cache) {
         $matches = false;
@@ -226,7 +225,6 @@ function get_metadata($term){
 
     if ($json_result != null && !exec('grep '.escapeshellarg($term).' metadata.log')) {
         $location = escapeshellarg('.Images/cache/'.$term.'.jpg');
-        error_log($location);
         exec("wget -O $location ".$json_result['i'][0]." &");
         imagejpeg(imagecreatefromjpeg($location), $location, 50);
         exec("echo ".escapeshellarg($term).'"\n"'.escapeshellarg(json_encode($json_result)).">> metadata.log");

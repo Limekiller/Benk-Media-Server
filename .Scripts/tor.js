@@ -1,8 +1,10 @@
 // Dynamically insert video into page
 
 function play(id, title, type){
-    get_metadata(title, id, view, true);
+    // Get the video information for the overlay
+    get_metadata(decodeURIComponent(title), id, view, true);
 
+    // Show the overlay
     $('#vid').addClass('video-container-active');
     $(".menu-container").addClass('nb-active-dl');
     $(".item-container").css('pointer-events','none');
@@ -10,41 +12,45 @@ function play(id, title, type){
 
     // Videos have to be inserted differently if it's a normal page or a search page
     if (type == 'name'){
-        document.getElementById('vid').innerHTML = "<div id='vid"+id+"' class='vid-close'><i class='fas fa-times'></i></div>"+
-            "<video src=\"./"+title+"\" id='_vid"+id+"' class='video-js vjs-default-skin' autoplay controls='true' preload='auto' width='100%' height='99%' data-setup='{}'><source src=\"./"+title+"\" type='video/mp4'><source src=\"./"+title+"\" type='video/webm'></video>";
+        document.getElementById('vid').innerHTML = "<video src=\"./"+title+"\" id='_vid"+id+"' class='video-js vjs-default-skin' autoplay controls='true' preload='auto' width='100%' height='99%' data-setup='{}'><source src=\"./"+title+"\" type='video/mp4'><source src=\"./"+title+"\" type='video/webm'></video>";
     } else {
-        document.getElementById('vid').innerHTML = "<div id='vid"+id+"' class='vid-close'><i class='fas fa-times'></i></div>"+
-            "<video src=\""+title+"\" id='_vid"+id+"' class='video-js vjs-default-skin' autoplay controls='true' preload='auto' width='100%' height='99%' data-setup='{}'><source src=\"./"+title+"\" type='video/mp4'><source src=\"./"+title+"\" type='video/webm'></video>";
+        document.getElementById('vid').innerHTML = "<video src=\""+title+"\" id='_vid"+id+"' class='video-js vjs-default-skin' autoplay controls='true' preload='auto' width='100%' height='99%' data-setup='{}'><source src=\"./"+title+"\" type='video/mp4'><source src=\"./"+title+"\" type='video/webm'></video>";
     }
 
-    generate_overlay();
 
+    var player;
     // Only use VideoJS if not mobile
     if (screen.width >= 760){
-        videojs('_vid'+id, {}, function(){
+        player = videojs('_vid'+id, {});
+        $(".video-js").addClass("overlay_enabled");
+        player.on('pause', function() {
+            if (player.seeking()) {
+                return;
+            }
+            $(".video-js").addClass("overlay_enabled");
+            $("#vid_info_overlay").addClass("overlay_enabled");
+            $("#vid_info_overlay").css('pointer-events', 'all');
+            $("#vid_info_overlay").css('opacity', '1');
+        });
+        player.on('ended', function() {
+            $(".video-js").addClass("overlay_enabled");
+            $("#vid_info_overlay").addClass("overlay_enabled");
+            $("#vid_info_overlay").css('pointer-events', 'all');
+            $("#vid_info_overlay").css('opacity', '1');
         });
     }
+    generate_overlay(player, id);
 
     $(document).keyup(function(event) {
         if(event.keyCode == 27){
-            dispose_vid();
+            dispose_vid(player);
         }
     });
 
-    // Close video when clicking X
-    $('.vid-close').on('click', function(e){
-        if (screen.width >= 760){
-            videojs("_vid"+id).dispose();
-        }
-        $(this).parent().removeClass('video-container-active');
-        $(this).parent().html("");
-        $(".menu-container").removeClass('nb-active-dl');
-        $(".item-container").css('pointer-events','');
-        $('body').css('overflow-y', 'auto');
-    });
 }
 
-function dispose_vid() {
+function dispose_vid(player) {
+    player.dispose();
     $('.video-container').removeClass('video-container-active');
     $('.video-container').html("");
     $(".menu-container").removeClass('nb-active-dl');
@@ -53,20 +59,20 @@ function dispose_vid() {
 }
 
 // Generates info overlay for each movie
-function generate_overlay(){
+function generate_overlay(player, id){
 
     overlay = "<div id='vid_info_overlay' class='overlay_enabled'><div class='loading'></div><img id='overlay_img' /><div id='overlay_info'><h1 id='overlay_title'></h1><h2 id='overlay_year'></h2><h3 id='overlay_stars'></h3><p id='overlay_desc'></p><h5 id='overlay_link'></h5><div style='display:flex;'><button id='overlay_play'>Play<i class='fas fa-play' style='margin-left:10px;'></i></button><button id='overlay_back'>Go Back</button></div></div></div>";
-    $("#vid").prepend(overlay);
-    $(".vid-close").css('filter', 'opacity(0)');
+    $("#_vid"+id).append(overlay);
 
     $("#overlay_play").on('click', function() {
+        $(".video-js").removeClass("overlay_enabled");
         $("#vid_info_overlay").removeClass("overlay_enabled");
         $("#vid_info_overlay").css('pointer-events', 'none');
         $("#vid_info_overlay").css('opacity', '0');
-        $(".vid-close").css('filter', 'opacity(1)');
+        player.play();
     });
     $("#overlay_back").on('click', function() {
-        dispose_vid();
+        dispose_vid(player);
     });
 
 }

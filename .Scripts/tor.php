@@ -47,7 +47,7 @@ function grab_dl($tor_site, $title, $site){
     $home = '/home/www-data';
 
     if ($tor_site == 'tc1'){
-        $html = file_get_contents('https://pirateproxy.gdn/search/'.rawurlencode('"'.$title.'"').'/0/99/0');
+        $html = file_get_contents('https://thepiratebay.org/search/'.rawurlencode('"'.$title.'"').'/0/99/0');
     } else if ($tor_site == 'tc2'){
         $title = strtolower(str_replace([' ','.',':','(',')','[',']',';'], '-', $title));
         $html = file_get_contents('https://www.magnetdl.com/'.substr($title,0,1).'/'.rawurlencode($title).'/se/desc/');

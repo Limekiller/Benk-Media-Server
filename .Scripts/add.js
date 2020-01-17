@@ -361,6 +361,7 @@ $(document).ready(function(){
 // Get movie info from IMDb database
 function get_metadata(term, id, view, overlay){
 
+    term = decodeURIComponent(term);
     var timeout = setTimeout(noIMDB(id));
 
     //Attempt to get info based on title
@@ -374,16 +375,15 @@ function get_metadata(term, id, view, overlay){
         try {
             data = JSON.parse(data);
             data_1 = JSON.parse(data[0]);
-            console.log(data_1);
             plot_summary(id, data_1, term, data[1], timeout, overlay);
 
         } catch (e) {
 
-            // If no results were found, split the title at the first number and try again
+            // If no results were found, split the title at the first number or paren and try again
             // The title might be in standard torrent title format and shortening it may produce results
             var newterm = '';
             for (var i = 0; i < term.length; i++){
-                if (['1','2','3','4','5','6','7','8','9','0'].includes(term[i])){
+                if (['1','2','3','4','5','6','7','8','9','0','(',')'].includes(term[i])){
                     break;
                 } else {
                     newterm = newterm+term[i];
@@ -399,7 +399,6 @@ function get_metadata(term, id, view, overlay){
 
                 data = JSON.parse(data);
                 data_1 = JSON.parse(data[0]);
-                console.log(data_1);
 
                 // Get plot summary with new data
                 plot_summary(id, data_1, newterm, data[1], timeout, overlay);
@@ -424,7 +423,6 @@ function plot_summary(id, data, term, image_exists, timeout, overlay){
         $('#'+id+' .loading').css('display', 'none');
         clearTimeout(timeout);
     } else {
-        console.log(data);
         var img = data['i'];
     }
 

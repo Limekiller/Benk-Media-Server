@@ -26,7 +26,8 @@ a {
     padding-top:50px;
     padding-left:100px;
 }
-.loading {
+.loading, #vid_info_overlay .loading {
+    box-sizing:initial;
     height:25px;
     width:25px;
     border:20px double pink;
@@ -358,6 +359,7 @@ a {
     animation:fade_in 0.4s ease;
     box-shadow:0px 0px 9px rgba(0,0,0,0.3);
     padding:25px;
+    display:none !important;
 }
 .span_fileitem h1 {
     font-size:35px;
@@ -400,14 +402,19 @@ a {
     padding:100px;
     transition:opacity 0.4s ease;
 }
-.overlay_enabled ~ .video-js .vjs-control-bar{
+.vjs-paused .vjs-control-bar, .video-js.overlay_enabled .vjs-control-bar {
     display:none;
 }
-#vid_info_overlay .loading, #vid_info_overlay button {
-    margin:0;
+#overlay_info button {
+    font-size:revert;
 }
 #overlay_info {
     max-width:600px;
+    color:black;
+}
+#overlay_stars {
+    font-size:15px;
+    font-family:Avenir Regular;
 }
 #overlay_title {
     margin-top:0px;
@@ -415,8 +422,13 @@ a {
 }
 #overlay_year {
     margin-bottom:35px;
+    font-size:25px;
 }
-#vid_info_overlay #overlay_back {
+#overlay_desc {
+    font-size:15px;
+    font-family:Avenir Regular;
+}
+#vid_info_overlay #vid_info_overlay #overlay_back {
     margin-left:25px;
 }
 #overlay_img {
@@ -437,21 +449,6 @@ a {
     opacity:0;
     pointer-events:none;
     transition:all 0.4s ease;
-}
-.vid-close {
-    font-family:Avenir Heavy;
-    color:grey;
-    right:0;
-    position:absolute;
-    font-size:35px;
-    margin-right:45px;
-    margin-top:25px;
-    transition:all 0.4s ease;
-    cursor:pointer;
-    z-index:99;
-}
-.vid-close:hover {
-    transform:scale(1.35);
 }
 .video-container-active {
     opacity:1;
@@ -683,7 +680,7 @@ a {
 #dd_submit {
     display:inline-block;
 }
-#ddc, #overlay_back {
+#ddc, #vid_info_overlay #overlay_back {
     background:linear-gradient(lightgrey, white);
     color:grey;
 }
@@ -809,7 +806,7 @@ input[type=text] {
     padding:10px;
     border:none;
 }
-input[type=submit], button {
+input[type=submit], button, #vid_info_overlay button {
     font-family:Avenir Bold;
     cursor:pointer;
     box-shadow:0px 0px 9px rgba(0,0,0,0.3);
@@ -825,12 +822,17 @@ input[type=submit], button {
 input[type=submit]:hover, button:hover {
     transform:scale(1.2);
 }
-button {
+button, {
     margin:0 auto;
     margin-top:30px;
 }
-button:hover {
+button:hover, #vid_info_overlay button:hover {
     transform:scale(1.2);
+}
+#vid_info_overlay .loading, #vid_info_overlay button {
+    margin:0;
+    margin-right:30px;
+    margin-top:30px;
 }
 .notify {
     color:white;
