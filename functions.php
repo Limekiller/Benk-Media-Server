@@ -90,7 +90,7 @@ function create_dir($dir_name) {
 }
 
 function change_name($prefix, $file, $name){
-    $file = $prefix.rawurlencode($file).'.mp4';
+    $file = $prefix.rawurldecode($file);
     $name = $name.'.mp4';
     $path = array_slice(explode('/',$file), 0, -1);
     $path = implode('/',$path).'/'.rawurlencode($name);

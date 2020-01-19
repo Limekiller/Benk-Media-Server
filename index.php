@@ -55,8 +55,7 @@ session_start();
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link href="http://vjs.zencdn.net/6.6.3/video-js.css" rel="stylesheet">
     <link rel="stylesheet" href="/video-js.css">
-    <script src="/.Scripts/add.js"></script>
-    <script src="/.Scripts/tor.js"></script>
+    <script src="/.Scripts/scripts.js"></script>
     <script src="https://kit.fontawesome.com/811c217a74.js" crossorigin="anonymous"></script>
 </head>
 <body>
