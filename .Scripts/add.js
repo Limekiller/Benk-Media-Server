@@ -170,6 +170,14 @@ $(document).ready(function(){
         }
     });
 
+    // Handle rename dialog stuff
+    $('#renc').on('click', function(){
+        $('.ren_container').removeClass('ren-active');
+    });
+    $('#renas').on('click', function(){
+        rename(active_video, $('#rena').val());
+    });
+
     //Let enter work for searching on torrent search and rename dialogue
     $("#dn").keyup(function(event) {
         if(event.keyCode == 13){
@@ -198,19 +206,6 @@ $(document).ready(function(){
             $('.letter-head').addClass('letter-head-active');}
     });
 
-    //Show rename dialogue
-    $('.item-ren').on('click', function(e){
-        e.stopPropagation();
-        $('.ren_container').addClass('ren-active');
-        $(this).parent().attr('id','rename');
-    });
-    $('#renc').on('click', function(){
-        $('.ren_container').removeClass('ren-active');
-        $('#rename').removeAttr('id');
-    });
-    $('#renas').on('click', function(){
-        rename($('#rename').children('.fip').html(), $('#rena').val());
-    });
 
     //Show mobile breadcrumbs on tap
     $('.mobile-bc-tog').on('click', function(e){
@@ -473,6 +468,9 @@ function noIMDB(id) {
 
 function rename(file, name) {
     file_prefix = window.location.pathname;
+    console.log(file);
+    console.log(name);
+    return;
     $.ajax({
         url: '/functions.php',
         data: {file_prefix_q: file_prefix, file_q: file, name_q: name},

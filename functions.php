@@ -70,15 +70,9 @@ function list_files() {
                     <div class='item-container item-container-art tooltip'>
                     <span id='span_fileitem<?php echo $vid_id; ?>' class='span_fileitem'></span>
                     <div id='fileitem<?php echo $vid_id; ?>' <?php echo $color; ?> onclick='play(<?php echo $vid_id;?>, "<?php echo rawurlencode($file) ?>", name)' class='file-item file-item-art' >
-                        <a class='item-del item-v' href="?itemdel=<?php echo rawurlencode($file)?>">
-                            <i class="fas fa-trash-alt"></i>
-                        </a>
-                        <div class='item-ren item-v'>
+                        <!--<div class='item-ren item-v'>
                             <i class="fas fa-font"></i>
-                        </div>
-                        <a class='item-dl item-v' href="?itemdl=<?php echo rawurlencode($file)?>">
-                            <i class="fas fa-download"></i>
-                        </a>
+                        </div>-->
                         <p class='fip <?php echo $cutoff?>'><?php echo rawurldecode($file_new)?></p>
                         <div class='loading' style='display:inherit;'></div>
                     </div>

@@ -1,8 +1,10 @@
 // Dynamically insert video into page
 
+var active_video;
 function play(id, title, type){
     // Get the video information for the overlay
     get_metadata(decodeURIComponent(title), id, view, true);
+    active_video = title;
 
     // Show the overlay
     $('#vid').addClass('video-container-active');
@@ -39,7 +41,7 @@ function play(id, title, type){
             $("#vid_info_overlay").css('opacity', '1');
         });
     }
-    generate_overlay(player, id);
+    generate_overlay(player, id, title);
 
     $(document).keyup(function(event) {
         if(event.keyCode == 27){
@@ -59,9 +61,9 @@ function dispose_vid(player) {
 }
 
 // Generates info overlay for each movie
-function generate_overlay(player, id){
+function generate_overlay(player, id, title){
 
-    overlay = "<div id='vid_info_overlay' class='overlay_enabled'><div class='loading'></div><img id='overlay_img' /><div id='overlay_info'><h1 id='overlay_title'></h1><h2 id='overlay_year'></h2><h3 id='overlay_stars'></h3><p id='overlay_desc'></p><h5 id='overlay_link'></h5><div style='display:flex;'><button id='overlay_play'>Play<i class='fas fa-play' style='margin-left:10px;'></i></button><button id='overlay_back'>Go Back</button></div></div></div>";
+    overlay = "<div id='vid_info_overlay' class='overlay_enabled'><div class='loading'></div><img id='overlay_img' /><div id='overlay_info'><h1 id='overlay_title'></h1><h2 id='overlay_year'></h2><h3 id='overlay_stars'></h3><p id='overlay_desc'></p><h5 id='overlay_link'></h5><div style='display:flex;'><button id='overlay_play'>Play<i class='fas fa-play' style='margin-left:10px;'></i></button><button id='overlay_back'>Go Back</button><a class='item-del' href='?itemdel="+title+"'></a><a class='item-dl' href='?itemdl="+title+"'></a><div class='item-ren'></div></div></div></div>";
     $("#_vid"+id).append(overlay);
 
     $("#overlay_play").on('click', function() {
@@ -73,6 +75,11 @@ function generate_overlay(player, id){
     });
     $("#overlay_back").on('click', function() {
         dispose_vid(player);
+    });
+
+    //Show rename dialogue
+    $('.item-ren').on('click', function(e){
+        $('.ren_container').addClass('ren-active');
     });
 
 }

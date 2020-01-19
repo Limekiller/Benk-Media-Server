@@ -330,15 +330,25 @@ a {
     width:16px;
     filter:invert(40%);
 }
+.item-del  {
+    background-image: url('/.Images/trash.svg');
+}
+.item-dl {
+    background-image: url('/.Images/dl.svg');
+}
+.item-ren {
+    background-image: url('/.Images/rename.svg');
+}
 .item-del, .item-ren, .item-dl{
-    opacity:0;
+    background-size: cover;
+    background-position: center;
     display:inline;
     float:right;
     transition:all 0.4s ease;
-    margin-left:10px;
     color:grey;
-    margin-top:-7px;
+    margin-top:30px;
     cursor:pointer;
+    width:50px;
 }
 .item-del:hover, .item-ren:hover, .item-dl:hover{
     transform:scale(1.6);
@@ -628,6 +638,9 @@ a {
 /*Create New Directory Window, Download Media, Upload New Media*/
 .dnf-body, .snf-body {
     overflow:hidden;
+}
+.ren_container {
+    z-index:999;
 }
 .cnd_container, .um_container, .um_cover, .dnf_container, .snf_container, .dd_container, .ren_container{
     position:fixed;
