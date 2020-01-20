@@ -197,5 +197,12 @@ session_start();
             </div>
         </div>
     </div>
+    <div class='error_container'>
+        <div class='error'>
+            <div id='errc' class='close'>X</div>
+            <h2>The media could not be loaded.</h2>
+            <p>This is probably because it's not in a format that your browser can play. You can try using Google Chrome if you're not already—as Chrome supports the most formats—or you can use the download button to download it to your computer and play it with something like <a href='https://www.videolan.org/vlc/'>VLC Media Player</a>. If the video plays but doesn't have sound, this may be for the same reason.</p>
+        </div>
+    </div>
 </body>
 </html>

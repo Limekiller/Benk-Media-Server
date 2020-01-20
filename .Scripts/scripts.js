@@ -316,6 +316,9 @@ $(document).ready(function(){
         $(this).addClass('t-choice-active');
         $('#tc2').removeClass('t-choice-active');
     });
+    $('#errc').on('click', function(){
+        $('.error_container').removeClass('error-active');
+    });
 
     //Switch torrent source
     $('#tc2').on('click', function(){
@@ -603,6 +606,9 @@ function play(id, title, type){
             $("#vid_info_overlay").css('pointer-events', 'all');
             $("#vid_info_overlay").css('opacity', '1');
         });
+        player.on('error', function() {
+            $(".error_container").addClass("error-active");
+        });
     }
     generate_overlay(player, id, title);
 
@@ -625,7 +631,7 @@ function dispose_vid(player) {
 // Generates info overlay for each movie
 function generate_overlay(player, id, title){
 
-    overlay = "<div id='vid_info_overlay' class='overlay_enabled'><div class='loading'></div><img id='overlay_img' /><div id='overlay_info'><h1 id='overlay_title'></h1><h2 id='overlay_year'></h2><h3 id='overlay_stars'></h3><p id='overlay_desc'></p><h5 id='overlay_link'></h5><div style='display:flex;'><button id='overlay_play'>Play<i class='fas fa-play' style='margin-left:10px;'></i></button><button id='overlay_back'>Go Back</button><a class='item-del' href='?itemdel="+title+"'></a><a class='item-dl' href='?itemdl="+title+"'></a><div class='item-ren'></div></div></div></div>";
+    overlay = "<div id='vid_info_overlay' class='overlay_enabled'><div class='loading'></div><img id='overlay_img' /><div id='overlay_info'><h1 id='overlay_title'>"+title+"</h1><h2 id='overlay_year'></h2><h3 id='overlay_stars'></h3><p id='overlay_desc'></p><h5 id='overlay_link'></h5><h5>This information is not guaranteed to be correct. If it is not, you can try renaming the file the exact title of the movie or TV show.</h5><div style='display:flex;'><button id='overlay_play'>Play<i class='fas fa-play' style='margin-left:10px;'></i></button><button id='overlay_back'>Go Back</button><a class='item-del' href='?itemdel="+title+"'></a><a class='item-dl' href='?itemdl="+title+"'></a><div class='item-ren'></div></div></div></div>";
     $("#_vid"+id).append(overlay);
 
     $("#overlay_play").on('click', function() {

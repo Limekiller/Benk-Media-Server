@@ -641,10 +641,10 @@ a {
 .dnf-body, .snf-body {
     overflow:hidden;
 }
-.ren_container {
+.ren_container, .error_container {
     z-index:999;
 }
-.cnd_container, .um_container, .um_cover, .dnf_container, .snf_container, .dd_container, .ren_container{
+.cnd_container, .um_container, .um_cover, .dnf_container, .snf_container, .dd_container, .ren_container, .error_container{
     position:fixed;
     top:0;
     left:0;
@@ -662,11 +662,11 @@ a {
 .um_cover .loading {
     margin-top:40vh;
 }
-.cnd-active, .um-active, .dnf-active, .dd-active, .ren-active, .snf-active{
+.cnd-active, .um-active, .dnf-active, .dd-active, .ren-active, .snf-active, .error-active{
     opacity:1;
     pointer-events:auto;
 }
-.cnd, .um, .dd, .ren {
+.cnd, .um, .dd, .ren, .error {
     margin:0 auto;
     margin-top:30vh;
     background-color:white;
@@ -676,7 +676,7 @@ a {
     padding:25px;
     padding-bottom:50px;
 }
-.cnd, .dd, .ren {
+.cnd, .dd, .ren, .error {
     height:200px;
     margin-top:40vh;
 }
