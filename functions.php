@@ -68,8 +68,7 @@ function list_files() {
             {
                 $vid_id += 1; ?>
                     <div class='item-container item-container-art tooltip'>
-                    <span id='span_fileitem<?php echo $vid_id; ?>' class='span_fileitem'></span>
-                    <div id='fileitem<?php echo $vid_id; ?>' <?php echo $color; ?> onclick='play(<?php echo $vid_id;?>, "<?php echo rawurlencode($file) ?>", name)' class='file-item file-item-art' >
+                    <div id='fileitem<?php echo $vid_id; ?>' <?php echo $color; ?> filename='<?php echo rawurlencode($file); ?>' type='name' class='file-item file-item-art' >
                         <!--<div class='item-ren item-v'>
                             <i class="fas fa-font"></i>
                         </div>-->
@@ -220,7 +219,17 @@ function get_metadata($term){
     if ($json_result != null && !exec('grep '.escapeshellarg($term).' metadata.log')) {
         $location = escapeshellarg('.Images/cache/'.$term.'.jpg');
         exec("wget -O $location ".$json_result['i'][0]." &");
-        imagejpeg(imagecreatefromjpeg($location), $location, 50);
+        $location = '.Images/cache/'.$term.'.jpg';
+
+        // Cut the image size in half and compress it to 90%
+        list($width, $height) = getimagesize($location);
+        $new_width = $width / 2;
+        $new_height = $height / 2;
+        $thumb = imagecreatetruecolor($new_width, $new_height);
+        $source = imagecreatefromjpeg($location);
+        imagecopyresized($thumb, $source, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+        imagejpeg($thumb, '.Images/cache/'.$term.'.jpg', 90);
+
         exec("echo ".escapeshellarg($term).'"\n"'.escapeshellarg(json_encode($json_result)).">> metadata.log");
     }
 

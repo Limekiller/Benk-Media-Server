@@ -1,4 +1,5 @@
 view = 1;
+global_metadata = {}
 
 $(document).ready(function(){
 
@@ -213,6 +214,11 @@ $(document).ready(function(){
         $('.breadcrumbs').addClass('mbc-active');
     });
 
+    // Play video
+    $('.file-item').on('click', function() {
+        play($(this).attr('id'), $(this).attr('filename'), $(this).attr('type'), $(this).attr('term'));
+    });
+
     //Close video
     $('.vid-close-active').on('click', function(e){
         $(this).parent().removeClass('video-container-active');
@@ -414,11 +420,18 @@ function plot_summary(id, data, term, image_exists, timeout, overlay){
     var realtitle = data['l'];
     var title = term;
     if (image_exists) {
+        $('#'+id).attr('term', realtitle);
+
         var img = '/.Images/cache/'+term+'.jpg';
         $('#'+id).css('background-image', 'url("'+img+'")');
         $('#'+id).css('background-size', 'cover');
-        $('#span_'+id).append('<div class="desc"><h1>'+title+'</h1><h2>'+year+'</h2><h3>'+star+'</h3></div>');
         $('#'+id+' .loading').css('display', 'none');
+
+        global_metadata[realtitle] = {};
+        global_metadata[realtitle]['img'] = img;
+        global_metadata[realtitle]['title'] = realtitle;
+        global_metadata[realtitle]['year'] = year;
+        global_metadata[realtitle]['stars'] = star;
         clearTimeout(timeout);
     } else {
         var img = data['i'];
@@ -436,11 +449,18 @@ function plot_summary(id, data, term, image_exists, timeout, overlay){
         $('#'+id).css('opacity', '1');
         $('#'+id+' .loading').css('display', 'none');
         if (image_exists) {
-            $('#span_'+id+' .desc').append('<p>'+data+'</p>');
+            global_metadata[realtitle]['desc'] = data;
         } else {
+            $('#'+id).attr('term', realtitle);
             $('#'+id).css('background-image', 'url("'+img+'")');
             $('#'+id).css('background-size', 'cover');
-            $('#span_'+id).append('<div class="desc"><h1>'+title+'</h1><h2>'+year+'</h2><h3>'+star+'</h3><p>'+data+'</div></div>');
+
+            global_metadata[realtitle] = {};
+            global_metadata[realtitle]['img'] = img;
+            global_metadata[realtitle]['title'] = realtitle;
+            global_metadata[realtitle]['year'] = year;
+            global_metadata[realtitle]['year'] = year;
+            global_metadata[realtitle]['desc'] = data;
         }
 
         if (overlay) {
@@ -450,7 +470,6 @@ function plot_summary(id, data, term, image_exists, timeout, overlay){
             $("#overlay_year").html(year);
             $("#overlay_stars").html(star);
             $("#overlay_desc").html(data);
-            $("#overlay_link").html(decodeURIComponent(title));
         }
 
     });
@@ -563,14 +582,8 @@ $(function() {
 // Dynamically insert video into page
 
 var active_video;
-function play(id, title, type){
-    // Get the video information for the overlay
-    modified_title = decodeURIComponent(title);
-    modified_title = modified_title.split(".");
-    modified_title.pop();
-    get_metadata(modified_title.join("."), id, view, true);
+function play(id, title, type, term){
 
-    active_video = title;
 
     // Show the overlay
     $('#vid').addClass('video-container-active');
@@ -610,7 +623,26 @@ function play(id, title, type){
             $(".error_container").addClass("error-active");
         });
     }
+
+    // Get the video information for the overlay
+    if (typeof term === "undefined") {
+        modified_title = decodeURIComponent(title);
+        modified_title = modified_title.split(".");
+        modified_title.pop();
+        get_metadata(modified_title.join("."), id, view, true);
+    }
+
+    active_video = title;
     generate_overlay(player, id, title);
+
+    if (typeof term !== "undefined") {
+        $("#vid_info_overlay .loading").remove();
+        $("#overlay_img").attr("src", global_metadata[term]['img']);
+        $("#overlay_title").html(global_metadata[term]['title']);
+        $("#overlay_year").html(global_metadata[term]['year']);
+        $("#overlay_stars").html(global_metadata[term]['stars']);
+        $("#overlay_desc").html(global_metadata[term]['desc']);
+    }
 
     $(document).keyup(function(event) {
         if(event.keyCode == 27){
@@ -631,7 +663,7 @@ function dispose_vid(player) {
 // Generates info overlay for each movie
 function generate_overlay(player, id, title){
 
-    overlay = "<div id='vid_info_overlay' class='overlay_enabled'><div class='loading'></div><img id='overlay_img' /><div id='overlay_info'><h1 id='overlay_title'>"+title+"</h1><h2 id='overlay_year'></h2><h3 id='overlay_stars'></h3><p id='overlay_desc'></p><h5 id='overlay_link'></h5><h5>This information is not guaranteed to be correct. If it is not, you can try renaming the file the exact title of the movie or TV show.</h5><div style='display:flex;'><button id='overlay_play'>Play<i class='fas fa-play' style='margin-left:10px;'></i></button><button id='overlay_back'>Go Back</button><a class='item-del' href='?itemdel="+title+"'></a><a class='item-dl' href='?itemdl="+title+"'></a><div class='item-ren'></div></div></div></div>";
+    overlay = "<div id='vid_info_overlay' class='overlay_enabled'><img id='overlay_img'><div class='loading'></div></img><div id='overlay_info'><h1 id='overlay_title'>"+title+"</h1><h2 id='overlay_year'></h2><h3 id='overlay_stars'></h3><p id='overlay_desc'></p><h5 id='overlay_link'>Media information is taken from the filename:<br />"+decodeURIComponent(decodeURIComponent(title))+"<br />If this information is not correct, you can try using the rename file function and typing in the exact title of the movie or TV show.</h5><div style='display:flex;'><button id='overlay_play'>Play<i class='fas fa-play' style='margin-left:10px;'></i></button><button id='overlay_back'>Go Back</button><a class='item-del' href='?itemdel="+title+"'></a><a class='item-dl' href='?itemdl="+title+"'></a><div class='item-ren'></div></div></div></div>";
     $("#_vid"+id).append(overlay);
 
     $("#overlay_play").on('click', function() {

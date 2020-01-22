@@ -444,8 +444,8 @@ a {
     margin-left:25px;
 }
 #overlay_img {
-    max-width: 340px;
-    object-fit: contain;
+    min-width: 350px;
+    object-fit: cover;
     max-height: 500px;
     margin-right: 75px;
     box-shadow:0px 0px 10px black;
