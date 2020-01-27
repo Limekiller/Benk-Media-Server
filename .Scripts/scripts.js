@@ -379,7 +379,7 @@ function get_metadata(term, id, view, overlay){
         try {
             data = JSON.parse(data);
             data_1 = JSON.parse(data[0]);
-            plot_summary(id, data_1, term, data[1], timeout, overlay);
+            plot_summary(id, data_1, term, null, data[1], timeout, overlay);
 
         } catch (e) {
 
@@ -396,7 +396,7 @@ function get_metadata(term, id, view, overlay){
 
             $.ajax({
                 url: '/functions.php',
-                data: {term_q: newterm},
+                data: {term_q: newterm, term_old: term},
                 type: 'POST',
                 context: document.body
             }).done(function(data){
@@ -405,24 +405,29 @@ function get_metadata(term, id, view, overlay){
                 data_1 = JSON.parse(data[0]);
 
                 // Get plot summary with new data
-                plot_summary(id, data_1, newterm, data[1], timeout, overlay);
+                plot_summary(id, data_1, newterm, term, data[1], timeout, overlay);
             });
         }
 
     });
 }
 
-function plot_summary(id, data, term, image_exists, timeout, overlay){
+function plot_summary(id, data, term, oldterm, image_exists, timeout, overlay){
     //Plot summary isn't part of data, so use returned ID to scrape the page for the plot summary
     var imdbid = data['id'];
     var year = data['y'];
     var star = data['s'];
     var realtitle = data['l'];
-    var title = term;
+    if (oldterm) {
+        var title = oldterm;
+    } else {
+        var title = term;
+    }
+
     if (image_exists) {
         $('#'+id).attr('term', realtitle);
 
-        var img = '/.Images/cache/'+term+'.jpg';
+        var img = '/.Images/cache/'+title+'.jpg';
         $('#'+id).css('background-image', 'url("'+img+'")');
         $('#'+id).css('background-size', 'cover');
         $('#'+id+' .loading').css('display', 'none');

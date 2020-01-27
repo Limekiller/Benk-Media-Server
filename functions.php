@@ -183,7 +183,7 @@ function breadcrumbs(){
     }
 }
 
-function get_metadata($term){
+function get_metadata($term, $old_term){
 
     $cache = fopen('metadata.log', 'r');
     if ($cache) {
@@ -228,9 +228,14 @@ function get_metadata($term){
         $thumb = imagecreatetruecolor($new_width, $new_height);
         $source = imagecreatefromjpeg($location);
         imagecopyresized($thumb, $source, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
-        imagejpeg($thumb, '.Images/cache/'.$term.'.jpg', 90);
 
-        exec("echo ".escapeshellarg($term).'"\n"'.escapeshellarg(json_encode($json_result)).">> metadata.log");
+        if ($old_term) {
+            imagejpeg($thumb, '.Images/cache/'.$old_term.'.jpg', 90);
+            exec("echo ".escapeshellarg($old_term).'"\n"'.escapeshellarg(json_encode($json_result)).">> metadata.log");
+        } else {
+            imagejpeg($thumb, '.Images/cache/'.$term.'.jpg', 90);
+            exec("echo ".escapeshellarg($term).'"\n"'.escapeshellarg(json_encode($json_result)).">> metadata.log");
+        }
     }
 
     print_r(json_encode([json_encode($json_result), 0]));
@@ -259,7 +264,11 @@ if (isset($_POST['file_q'])){
    change_name($_POST['file_prefix_q'], $_POST['file_q'], $_POST['name_q']); 
 }
 if (isset($_POST['term_q'])){
-    get_metadata($_POST['term_q']);
+    if (isset($_POST['term_old'])) {
+        get_metadata($_POST['term_q'], $_POST['term_old']);
+    } else {
+        get_metadata($_POST['term_q'], null);
+    }
 }
 if (isset($_POST['imdbid_q'])){
     get_description($_POST['imdbid_q']);
