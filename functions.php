@@ -89,7 +89,7 @@ function create_dir($dir_name) {
 }
 
 function change_name($prefix, $file, $name){
-    $file = $prefix.rawurldecode($file);
+    $file = rawurldecode($prefix).rawurldecode($file);
     $name = $name.'.mp4';
     $path = array_slice(explode('/',$file), 0, -1);
     $path = implode('/',$path).'/'.rawurlencode($name);
@@ -216,7 +216,8 @@ function get_metadata($term, $old_term){
         $json_result = $json["d"][0];
     }
 
-    if ($json_result != null && !exec('grep '.escapeshellarg($term).' metadata.log')) {
+    error_log(escapeshellarg($term));
+    if ($json_result != null && !exec('grep '.escapeshellarg($term).'\n metadata.log')) {
         $location = escapeshellarg('.Images/cache/'.$term.'.jpg');
         exec("wget -O $location ".$json_result['i'][0]." &");
         $location = '.Images/cache/'.$term.'.jpg';

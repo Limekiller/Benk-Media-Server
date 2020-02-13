@@ -18,12 +18,17 @@ function get_dls(){
     } else if ($percent == "99"){
        $percent = "Validating..."; 
     }
+    if (is_numeric($percent)) {
+        $text_after_percent = '%';
+    } else {
+        $text_after_percent = '';
+    }
 
 	$output = $output."<div id='$line[1]' class='partial-listing'>
 				<div class='close' onclick=\"cancel('$line[1]','$name')\">X</div>
 				<div class='loading'></div>
 				".rawurldecode($name)."
-				<p style='float:right;margin-right:30px;margin-top:2px;'>".$percent."%</div>";
+				<p style='float:right;margin-right:30px;margin-top:2px;'>".$percent.$text_after_percent."</div>";
     }
 
     if ($output == ""){

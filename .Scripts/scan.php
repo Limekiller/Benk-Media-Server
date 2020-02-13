@@ -60,6 +60,11 @@ while(True){
     $stopped = $aria2->tellStopped(["status","gid","dir","completedLength","totalLength","uploadSpeed","verifiedLength"]); 
 
     //foreach ($aria2->tellActive(["status","gid","dir","completedLength","totalLength","uploadSpeed","verifiedLength"])['result'] as $result){
+   // if (!count(array_merge($active, $waiting, $stopped)['result'])) {
+   //     exec("rm -r ../.Partial/*");
+   //     exec("touch ../.Partial/downloads");
+   // }
+
     foreach (array_merge($active, $waiting, $stopped)['result'] as $result){
 
         $gid = $result['gid'];
@@ -99,7 +104,14 @@ while(True){
         $file_contents = explode("\n", $file_contents);
         $location = $file_contents[1];
         $locations[$gid] = array($location, 1);
-        $in_progress = $in_progress."$dir|$gid|$percent\n";
+
+        if ((disk_free_space('/') - $total) < 1000) {
+            exec("rm -r '$dir'*");
+            $in_progress = $in_progress."$dir|$gid|This download has been canceled due to lack of disk space.\n";
+        } else {
+            $in_progress = $in_progress."$dir|$gid|$percent\n";
+        }
+
     }
 
     // Delete all non-updated keys
