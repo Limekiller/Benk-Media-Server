@@ -22,5 +22,3 @@ Goals:
 - Allow users to delete multiple files at a time
 
 - Improve music player (album art, skip buttons?)
-
-- Possibly create a Desktop app to go with it? (Probs not)
